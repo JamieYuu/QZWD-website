@@ -1,5 +1,6 @@
 <template>
     <div id="wholePage">
+        <theHeader />
         <div id="indexbody">
 
             <div id="headerImgPart">
@@ -14,53 +15,15 @@
             <hr id="hr1">
 
             <div id="mainBodyDiv">
-                <p style="font-size: 20px">查找适合的专家</p>
-                <p class="bodyText">使用搜索引擎查找适合的专家</p>
 
-                <b-form>
-                        <b-form-group id="formGroupName"
-                            label="姓名"
-                            label-for="formGroupNameInput">
-                        <b-form-input id="formGroupNameInput"
-                            type="text" v-model="form.name"
-                            placeholder="输入姓名(非必须)">
-                        </b-form-input>
-                        </b-form-group>
-
-                        <b-form-group id="formGroupPossition"
-                            label="职位"
-                            label-for="formGroupPossitionSelect">
-                        <b-form-select id="formGroupPossitionSelect"
-                            :options="possitions"
-                            v-model="form.possition">
-                        </b-form-select>
-                        </b-form-group>
-
-                        <b-form-group id="formGroupProfessional"
-                            label="专业领域"
-                            label-for="formGroupProfessionalSelect">
-                        <b-form-select id="formGroupProfessionalSelect"
-                            :options="professionals"
-                            v-model="form.professional">
-                        </b-form-select>
-                        </b-form-group>
-
-                        <div id="searchDiv">
-                            <b-btn id="searchBtn" variant="outline-primary" type="submit"> 搜索 <i class="fa fa-search" aria-hidden="true"></i></b-btn>
-                        </div>
-                </b-form>
-
-                <hr style="border-width: 3px">
-
-                <p style="font-size: 20px">合伙人律师</p>
+                <p style="font-size: 20px">合伙人</p>
                 <b-container>
-                    <template v-for="n in 2">
-                        <div :key="n">
                     <b-row>
-                        <template v-for="n in 3">
-                        <b-col :key="n">
-                            <div>
-                                <b-card title="律师姓名"
+                        <template v-for="ele in hhrStaffs">
+                            <div :key="ele.id">
+                                <b-col>
+                                <div>
+                                <b-card :title="ele.name"
                                 :img-src="logoURL"
                                 img-alt="Image"
                                 img-top
@@ -68,88 +31,123 @@
                                 style="width: 16rem;"
                                 class="mb-2">
                                 <div class="cardInfo">
-                                <p class="card-text">一级合伙人</p>
-                                <p class="card-text">电话 123456</p>
-                                <p class="card-text">邮箱 12345@123.com</p>
+                                <p class="card-text">{{ele.position}}</p>
+                                <p class="card-text">电话 {{ele.phone}}</p>
+                                <p class="card-text">邮箱 {{ele.email}}</p>
                                 <div style="text-align: center">
-                                <b-btn v-b-modal.modal1 variant="outline-primary">详细资料</b-btn>
+                                <b-btn v-on:click="getTarget(ele)" v-b-modal.modal1 variant="outline-primary">详细资料</b-btn>
                                 </div>
                                 </div>
                                 </b-card>
                             </div>
-                        </b-col>
+                                </b-col>
+                            </div>
                         </template>
                     </b-row>
                     <br/>
-                        </div>
-                    </template>
                 </b-container>
-            </div>
 
+                <hr style="border-width: 3px">
+
+                <p style="font-size: 20px">律师团队</p>
+                <p class="bodyText">使用搜索引擎查找适合的专家</p>
+                <b-form>
+                        <b-form-input id="formGroupNameInput"
+                            type="text" v-model="filter"
+                            placeholder="输入关键字(eg: 姓名,职业领域, etc.)">
+                        </b-form-input>
+                        </b-form-group>
+                </b-form>
+                <br/>
+
+                <template>
+                    <div style="text-align: center">
+                    <b-table hover 
+                        :items="lsStaffs"
+                        :current-page="currentPage"
+                        :per-page="perPage"
+                        :filter="filter"
+                        @filtered="onFiltered"
+                        ></b-table>
+                <b-container><b-row><b-col></b-col>
+                <b-col>
+                    <b-pagination-nav base-url="#" :number-of-pages="totalRows" v-model="currentPage" />
+                </b-col>
+                <b-col></b-col></b-row></b-container>
+                </div>
+                </template>
+            </div>
+            
             <br/>
             <hr id="hr1">
 
             <b-modal size="lg" 
                 hide-footer 
                 id="modal1" 
-                title="律师姓名"
+                :title="target.name"
                 header-bg-variant="primary"
                 header-text-variant="light">
 
                 <b-media right-align vertical-align="center">
                     <b-img slot="aside" blank width="200" blank-color="#ccc"/>
-                    <h5 class="mt-0 mb-1">一级合伙人</h5>
+                    <h5 class="mt-0 mb-1">{{target.position}}</h5>
                     <div style="line-height: 6px">
                         <br/><br/><br/>
-                    <p class="bodyText">电话 123456</p>
-                    <p class="bodyText">邮箱 123456@123.com</p>
-                    <p class="bodyText">传真 123456@123.com</p>
-                    <p class="bodyText">其他什么联系方式 123456@123.com</p>
+                    <p class="bodyText">电话 {{target.phone}}</p>
+                    <p class="bodyText">邮箱 {{target.email}}</p>
+                    <p class="bodyText">其他什么联系方式 {{target.oPhone}}</p>
                     </div>
                 </b-media>
                 <h6 style="font-size: 20px;" class="my-4">律师介绍</h6>
-                <p class="bodyText">这里是律师介绍</p>
+                <p class="bodyText">{{target.desc}}</p>
                 <h6 style="font-size: 20px;" class="my-4">专业领域</h6>
                 <ul>
-                    <li>专业领域1</li>
-                    <li>专业领域2</li>
-                    <li>专业领域3</li>
-                    <li>专业领域4</li>
-                </ul>
-                <h6 style="font-size: 20px;" class="my-4">案例与文章</h6>
-                <ul>
-                    <li><router-link to="/">案例1</router-link></li>
-                    <li><router-link to="/">案例2</router-link></li>
-                    <li><router-link to="/">文章1</router-link></li>
-                    <li><router-link to="/">文章2</router-link></li>
+                    <template v-for="pros in target.profession">
+                    <li :key="pros.id">{{pros}}</li>
+                    </template>
                 </ul>
             </b-modal>
 
         </div>
-
+        <theBottom />
     </div>
   
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
   data () {
     return {
-      infoP: '  Q Z  & W D (JIANG XI)   L A W    F I R M',
+      firebaseRef: firebase.database().ref(),
       logoURL: require('@/assets/logo.jpg'),
       headerImg: require('@/assets/STFImg.jpg'),
       wxImg: require('@/assets/wx.jpeg'),
+      filter: null,
       form: {
         name: '',
-        possition: null,
         professional: null
       },
       possitions: [
         { text: '全部', value: null }, '高级合伙人', '二级合伙人', '专业律师'
       ],
       professionals: [
-        { text: '全部', value: null }, '业务1', '业务2', '业务3', '业务4'
-      ]
+        { text: '全部', value: null }, '仲裁', '啦啦啦', '嘿', '业务4'
+      ],
+      staffs: {
+        staff: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
+      },
+      target: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}},
+      hhrStaffs: [
+        {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
+      ],
+      lsStaffs: [
+        {姓名: '', 邮箱: '', 联系电话: '', 专业领域: []}
+      ],
+      currentPage: 1,
+      perPage: 10,
+      totalRows: 0
     }
   },
 
@@ -158,7 +156,42 @@ export default {
   },
 
   methods: {
+    getTarget: function (selectLawyer) {
+      this.target = selectLawyer
+    },
+    onFiltered (filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = Math.ceil(filteredItems.length / this.perPage)
+      this.currentPage = 1
+    }
+  },
 
+  created: function () {
+    this.firebaseRef.child('Staffs').on('value', (datasnap) => {
+      var some = datasnap.val()
+      this.staffs = some
+    })
+    for (var theStaff in this.staffs) {
+      var staffObj = this.staffs[theStaff]
+      if (staffObj.position === '律师') {
+        var profe = []
+        for (var profObj in staffObj.profession) {
+          profe.push(staffObj.profession[profObj])
+        }
+        var addStaff = {
+          姓名: staffObj.name,
+          邮箱: staffObj.email,
+          联系电话: staffObj.phone,
+          专业领域: profe
+        }
+        this.lsStaffs.push(addStaff)
+      } else {
+        this.hhrStaffs.push(staffObj)
+      }
+    }
+    this.hhrStaffs.shift()
+    this.lsStaffs.shift()
+    this.totalRows = Math.ceil(this.lsStaffs.length / this.perPage)
   }
 }
 </script>

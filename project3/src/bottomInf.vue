@@ -1,48 +1,51 @@
 <template>
   <div>
     <router-view></router-view>
+
+    <div id="indexBottomInfo">
+            <b-container>
+                <b-row>
+                    <b-col></b-col>
+                    <b-col>
+                        <div id="wx2wmpart">
+                            <i class="fa fa-weixin fa-2x"></i>
+                            <b-img id="wx2wm" :src="wxImg" />
+                        </div>
+                    </b-col>
+                    <b-col cols="5">
+                        <div id="declearation">
+                            <br/>
+                            <p id="decText">版权所有:江西求正沃德律师事务所</p>
+                            <p id="decText">Email: qz.jz.lawfirm@163.com</p>
+                            <p id="decText">技术支持:Jiazheng Yu <i class="fa fa-envelope" aria-hidden="true"></i> jzjaimeyu@gmail.com</p>
+                            <p id="decText">@江西求正沃德律师事务所 2017. 赣ICP备 06003918号</p>
+                        </div>
+                    </b-col>
+                    <b-col></b-col>
+                </b-row>
+            </b-container>
+        </div>
   </div>
 </template>
 
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import firebase from 'firebase'
 
 export default {
   data () {
     return {
-      config: {
-        apiKey: 'AIzaSyBu-mEfUAvkg2MDn2KBJ_mk1OwGIEb5PMo',
-        authDomain: 'qzwdproject.firebaseapp.com',
-        databaseURL: 'https://qzwdproject.firebaseio.com',
-        projectId: 'qzwdproject',
-        storageBucket: 'qzwdproject.appspot.com',
-        messagingSenderId: '150000319769'
-      }
+      wxImg: require('@/assets/wx.jpeg')
     }
   },
 
   created: function () {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(this.config)
-    }
-    let ckeditor = document.createElement('script')
-    let firebaseEditor = document.createElement('script')
-
-    firebaseEditor.setAttribute('src', 'https://www.gstatic.com/firebasejs/4.6.2/firebase.js')
-    ckeditor.setAttribute('src', 'https://use.fontawesome.com/c17a47c7ea.js')
-
-    document.head.appendChild(ckeditor)
-    document.head.appendChild(firebaseEditor)
   },
 
   computed: {
-
   },
 
   methods: {
-
   }
 }
 </script>

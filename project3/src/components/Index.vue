@@ -1,5 +1,6 @@
 <template>
     <div id="wholePage">
+      <theHeader />
         <div id="indexbody">
 
             <div id="carousel">
@@ -57,7 +58,7 @@
       </div>
       
         </div>
-
+    <theBottom />
     </div>
   
 </template>

@@ -1,5 +1,6 @@
 <template>
     <div id="wholePage">
+        <theHeader />
         <div id="indexbody">
             
             <br/><br/><br/><br/><br/><br/><br/>
@@ -45,7 +46,7 @@
             <br/>
             <hr id="hr1">
         </div>
-
+        <theBottom />
     </div>
   
 </template>
@@ -78,13 +79,10 @@ export default {
   },
 
   created: function () {
-    console.log('built')
-    console.log(this.allBusiness)
     this.firebaseRef.child('Business').on('value', (datasnap) => {
       var some = datasnap.val()
       this.allBusiness = some
     })
-    console.log(this.allBusiness)
   },
 
   computed: {

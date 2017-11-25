@@ -1,5 +1,6 @@
 <template>
     <div id="wholePage">
+        <theHeader />
         <div id="indexbody">
 
             <div id="headerImgPart">
@@ -65,7 +66,7 @@
             <br/>
 
         </div>
-
+        <theBottom />
     </div>
   
 </template>

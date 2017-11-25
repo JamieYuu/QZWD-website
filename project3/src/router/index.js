@@ -12,6 +12,9 @@ import Arbitration from '@/components/business/arbitration'
 import CompetitionTradeSupervision from '@/components/business/competition-trade-Supervision'
 import RealEstate from '@/components/business/real-estate'
 import IntellectualProperty from '@/components/business/intellectual-property'
+import Error from '@/components/error'
+import AdminLogin from '@/components/admin-login'
+import AdminMain from '@/components/adminMain'
 
 Vue.use(Router)
 
@@ -21,6 +24,18 @@ export default new Router({
       path: '/',
       name: 'Index',
       component: Index
+    },
+
+    {
+      path: '/404',
+      name: 'Error',
+      component: Error
+    },
+
+    {
+      path: '*',
+      name: 'Error',
+      redirect: '/404'
     },
 
     {
@@ -54,7 +69,7 @@ export default new Router({
     },
 
     {
-      path: '/news/the-article',
+      path: '/news/the-article/:id',
       name: 'article',
       component: TheArticle
     },
@@ -87,6 +102,18 @@ export default new Router({
       path: '/business/intellectual-property',
       name: 'intellectualProperty',
       component: IntellectualProperty
+    },
+
+    {
+      path: '/admin-login',
+      name: 'adminLogin',
+      component: AdminLogin
+    },
+
+    {
+      path: '/admin-main',
+      name: 'adminLogin',
+      component: AdminMain
     }
   ]
 })

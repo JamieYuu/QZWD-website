@@ -1,5 +1,6 @@
 <template>
     <div id="wholePage">
+        <theHeader />
         <div id="indexbody">
 
             <div id="headerImgPart">
@@ -21,24 +22,14 @@
                                 <p class="articleDes">查阅我们对影响您业务的法律问题的最新见解</p>
                                 <b-btn variant="outline-primary"><router-link to="/news/articles" class="links">查阅更多文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link></b-btn>
                             </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
+                            <template v-for="obj in wzArticles">
+                            <b-col :key="obj.id">
+                                <p class="articleTitle">{{obj.title}}</p>
+                                <p class="articleDes">{{obj.des}}</p>
+                                <p class="articleDate">{{obj.date}}</p>
+                                <b-btn v-on:click="selectArt(obj)" variant="outline-primary"><router-link :to="theUrl(obj)" class="links">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link></b-btn>
                             </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                            </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                            </b-col>
+                            </template>
                         </b-row>
                     </b-container>
                     <br/>
@@ -55,24 +46,14 @@
                                 <p class="articleDes">最新的求正沃德新闻与发展</p>
                                 <b-btn variant="outline-primary">更多新闻 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
                             </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
+                            <template v-for="obj in swsxwArticles">
+                            <b-col :key="obj.id">
+                                <p class="articleTitle">{{obj.title}}</p>
+                                <p class="articleDes">{{obj.des}}</p>
+                                <p class="articleDate">{{obj.date}}</p>
                                 <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
                             </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                            </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                            </b-col>
+                            </template>
                         </b-row>
                     </b-container>
                     <br/>
@@ -89,24 +70,14 @@
                                 <p class="articleDes">最新的法律法规解读</p>
                                 <b-btn variant="outline-primary">更多新闻 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
                             </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
+                            <template v-for="obj in fgjdArticles">
+                            <b-col :key="obj.id">
+                                <p class="articleTitle">{{obj.title}}</p>
+                                <p class="articleDes">{{obj.des}}</p>
+                                <p class="articleDate">{{obj.date}}</p>
                                 <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
                             </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                            </b-col>
-                            <b-col>
-                                <p class="articleTitle">文章标题1</p>
-                                <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                                <p class="articleDate">2017/11/11</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                            </b-col>
+                            </template>
                         </b-row>
                     </b-container>
                     <br/>
@@ -115,19 +86,23 @@
                 <hr id="hr1">
             </div>
         </div>
-
+        <theBottom />
     </div>
   
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
   data () {
     return {
-      infoP: '  Q Z  & W D (JIANG XI)   L A W    F I R M',
-      logoURL: require('@/assets/logo.jpg'),
+      firebaseRef: firebase.database().ref(),
       headerImg: require('@/assets/KLDImg.jpg'),
-      wxImg: require('@/assets/wx.jpeg')
+      articles: {article: {ZL: '', author: '', date: '', des: '', information: '', title: '', type: {}}},
+      wzArticles: [{article: {ZL: '', author: '', date: '', des: '', information: '', title: '', type: {}}}],
+      swsxwArticles: [{article: {ZL: '', author: '', date: '', des: '', information: '', title: '', type: {}}}],
+      fgjdArticles: [{article: {ZL: '', author: '', date: '', des: '', information: '', title: '', type: {}}}]
     }
   },
 
@@ -135,8 +110,50 @@ export default {
 
   },
 
-  methods: {
+  computed: {
 
+  },
+
+  created: function () {
+    this.firebaseRef.child('Ariticles').on('value', (datasnap) => {
+      var some = datasnap.val()
+      this.articles = some
+      for (var obj in this.articles) {
+        var objArt = this.articles[obj]
+        if (objArt.ZL === 'WZ') {
+          this.wzArticles.push(objArt)
+        }
+        if (objArt.ZL === 'SWSXW') {
+          this.swsxwArticles.push(objArt)
+        }
+        if (objArt.ZL === 'FGJD') {
+          this.fgjdArticles.push(objArt)
+        }
+      }
+    })
+    this.wzArticles.shift()
+    this.swsxwArticles.shift()
+    this.fgjdArticles.shift()
+  },
+
+  methods: {
+    theUrl: function (obj) {
+      var url = '/news/the-article/:' + obj.title
+      console.log(url)
+      return url
+    },
+    selectArt: function (obj) {
+      this.firebaseRef.child('SelectArticle').update({
+        ZL: obj.ZL,
+        author: obj.author,
+        date: obj.date,
+        des: obj.des,
+        information: obj.information,
+        title: obj.title,
+        type: obj.type
+      })
+      console.log('clicked')
+    }
   }
 }
 </script>

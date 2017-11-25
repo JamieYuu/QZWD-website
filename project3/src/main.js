@@ -6,10 +6,15 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import firebase from 'firebase'
+import Header from './header'
+import BottomInf from './bottomInf'
 
 Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
+
+Vue.component('theHeader', Header)
+Vue.component('theBottom', BottomInf)
 
 var config = {
   apiKey: 'AIzaSyBu-mEfUAvkg2MDn2KBJ_mk1OwGIEb5PMo',

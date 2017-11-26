@@ -15,6 +15,7 @@ import IntellectualProperty from '@/components/business/intellectual-property'
 import Error from '@/components/error'
 import AdminLogin from '@/components/admin-login'
 import AdminMain from '@/components/adminMain'
+import LawyerManage from '@/components/admin/lawyers-manage'
 
 Vue.use(Router)
 
@@ -34,7 +35,7 @@ export default new Router({
 
     {
       path: '*',
-      name: 'Error',
+      name: 'toError',
       redirect: '/404'
     },
 
@@ -112,8 +113,14 @@ export default new Router({
 
     {
       path: '/admin-main',
-      name: 'adminLogin',
+      name: 'adminMain',
       component: AdminMain
+    },
+
+    {
+      path: '/admin/lawyers-manage',
+      name: 'lawyersManage',
+      component: LawyerManage
     }
   ]
 })

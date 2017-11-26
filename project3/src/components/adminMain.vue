@@ -2,7 +2,21 @@
   <div>
       <div class="text">
           <template v-if="loggedIn">
-            <p>logged in</p>
+            <h3>你好,管理员</h3>
+            <br/>
+            <b-container>
+              <b-row>
+                <b-col>
+                  <b-btn class="buttons" @click="toLawManage" variant="outline-primary">律师管理</b-btn>
+                </b-col>
+                <b-col>
+                  <b-btn class="buttons" variant="outline-primary">文章管理</b-btn>
+                </b-col>
+                <b-col>
+                  <b-btn class="buttons" variant="outline-primary">案例管理</b-btn>
+                </b-col>
+              </b-row>
+            </b-container>
           </template>
           <template v-else>
             <p style="font-size: 30px">未登录,请先登录</p>
@@ -12,6 +26,7 @@
             </p>
           </template>
       </div>
+      <theBottom />
   </div>
 </template>
 
@@ -37,11 +52,18 @@ export default {
   },
 
   methods: {
+    toLawManage: function () {
+      this.$router.push('/admin/lawyers-manage')
+    }
   }
 }
 </script>
 
 <style scoped>
+.buttons:hover {
+    cursor: pointer;
+}
+
 .text {
     text-align: center;
     margin-top: 250px;

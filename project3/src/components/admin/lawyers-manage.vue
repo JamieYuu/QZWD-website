@@ -21,14 +21,14 @@
                 <div style="text-align: center">
                 <b-container>
                     <b-row>
-                        <b-col><p class="tableHeader">姓名</p></b-col><b-col><p class="tableHeader">手机</p></b-col><b-col><p class="tableHeader">邮箱</p></b-col><b-col></b-col>
+                        <b-col><p class="tableHeader">姓名</p></b-col><b-col><p class="tableHeader">手机</p></b-col><b-col><p class="tableHeader">邮箱</p></b-col><b-col class="tableHeader">职位</b-col><b-col></b-col>
                     </b-row>
-                    <template v-for="obj in hhrStaffs">
+                    <template v-for="obj in staffs">
                         <b-row :key="obj.id">
-                            <b-col>{{obj.name}}</b-col><b-col>{{obj.phone}}</b-col><b-col>{{obj.email}}</b-col>
+                            <b-col>{{obj.name}}</b-col><b-col>{{obj.phone}}</b-col><b-col>{{obj.email}}</b-col><b-col>{{obj.position}}</b-col>
                             <b-col>
                                 <p class="buttons editBtn" @click="editLawyer"><i class="fa fa-pencil" aria-hidden="true"></i></p>
-                                <p v-b-modal.modal-delete class="buttons deleteBtn" @click="deleteLawyer"><i class="fa fa-trash-o" aria-hidden="true"></i></p>
+                                <p v-b-modal.modal-delete class="buttons deleteBtn" @click="delLawyer(obj)"><i class="fa fa-trash-o" aria-hidden="true"></i></p>
                             </b-col>
                         </b-row>
                     </template>
@@ -36,35 +36,6 @@
                 </div>
 
                 <br/><br/>
-
-                <b-container>
-                    <b-row>
-                        <b-col>
-                            <p style="font-size: 24px">律师列表</p>
-                        </b-col>
-                        <b-col></b-col><b-col></b-col><b-col></b-col>
-                        <b-col>
-                            <b-btn class="buttons" variant="success">添加律师 <i class="fa fa-plus" aria-hidden="true"></i></b-btn>
-                        </b-col>
-                    </b-row>
-                </b-container>
-                <hr/>
-                <div style="text-align: center">
-                <b-container>
-                    <b-row>
-                        <b-col><p class="tableHeader">姓名</p></b-col><b-col><p class="tableHeader">手机</p></b-col><b-col><p class="tableHeader">邮箱</p></b-col><b-col></b-col>
-                    </b-row>
-                    <template v-for="obj in lsStaffs">
-                        <b-row :key="obj.id">
-                            <b-col>{{obj.name}}</b-col><b-col>{{obj.phone}}</b-col><b-col>{{obj.email}}</b-col>
-                            <b-col>
-                                <p class="buttons editBtn" @click="editLawyer"><i class="fa fa-pencil" aria-hidden="true"></i></p>
-                                <p v-b-modal.modal-delete class="buttons deleteBtn" @click="deleteLawyerPop(obj)"><i class="fa fa-trash-o" aria-hidden="true"></i></p>
-                            </b-col>
-                        </b-row>
-                    </template>
-                </b-container>
-                </div>
                 <br/><br/><br/> 
             </div>
             <b-modal ref="deleteModal" id="modal-delete" centered title="删除律师">
@@ -94,13 +65,7 @@ export default {
     return {
       firebaseRef: firebase.database().ref(),
       loggedIn: false,
-      staffs: {
-        staff: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
-      },
-      hhrStaffs: [
-        {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
-      ],
-      lsStaffs: [
+      staffs: [
         {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
       ],
       newStaffs: null,
@@ -120,30 +85,25 @@ export default {
       var some = datasnap.val()
       this.staffs = some
     })
-    for (var obj in this.staffs) {
-      var theObj = this.staffs[obj]
-      if (theObj.position === '律师') {
-        this.lsStaffs.push(theObj)
-      } else {
-        this.hhrStaffs.push(theObj)
-      }
-    }
-    this.lsStaffs.shift()
-    this.hhrStaffs.shift()
   },
 
   methods: {
     editLawyer: function () {
       console.log('clicked Edit')
     },
-    deleteLawyerPop: function (obj) {
+    delLawyer (obj) {
       this.lawWannaDelete = obj
     },
     deleteLawyer: function () {
-      console.log(this.staffs)
-      var lawyer = this.lawWannaDelete
-      delete this.staffs.lawyer
-      console.log(this.staffs)
+      for (var lawyer in this.staffs) {
+        if (this.staffs[lawyer] === this.lawWannaDelete) {
+          delete this.staffs[lawyer]
+          break
+        }
+      }
+      this.firebaseRef.child('Staffs').set(this.staffs)
+      this.$refs.deleteModal.hide()
+      location.reload()
     },
     hideDeleteModal () {
       this.$refs.deleteModal.hide()

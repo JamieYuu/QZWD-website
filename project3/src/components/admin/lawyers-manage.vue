@@ -1,6 +1,9 @@
 <template>
   <div>
         <template v-if="loggedIn">
+            <div id="backToMain">
+                <router-link to="/admin/admin-login">管理员首页</router-link>
+            </div>
             <div style="text-align: center; margin-top: 80px">
                 <h3>律师管理</h3>
                 <br/>
@@ -49,6 +52,7 @@
 
             <b-modal ref="editModal" id="modal-edit" centered title="编辑律师" size="lg">
                 <h4>编辑律师{{this.lawWannaEdit.name}}</h4>
+                <br/>
                 <b-container>
                     <b-row>
                         <b-col>
@@ -72,31 +76,33 @@
                     </b-row>
                     <b-row>
                         <b-col>
+                            <br/>
                             <label>描述: </label>
                             <b-form-textarea v-model="lawWannaEdit.desc"></b-form-textarea>
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col>
+                            <br/>
                             <label>职位: </label>
                             <b-form-select v-model="lawWannaEdit.position" :options="options"></b-form-select>
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col>
+                            <br/>
                             <label>专业领域: </label>
-                            <ul>
-                                <template v-for="obj in lawPros">
-                                    <li :key="obj.id">
-                                        <input :placeholder="obj"/>
-                                    </li>
-                                </template>
-                            </ul>
+                            <template v-for=" val in pros">
+                                <div :key="val.id">
+                                <input type="checkbox" :id="val.id" :value="val" v-model="lawPros">
+                                <label :for="val.id">{{val}}</label>
+                                </div>
+                            </template>
                         </b-col>
                     </b-row>
                 </b-container>
                 <div slot="modal-footer">
-                    <b-btn class="buttons" variant="success">保存</b-btn>
+                    <b-btn class="buttons" @click="saveEdit" variant="success">保存</b-btn>
                     <b-btn class="buttons" variant="secondary" @click="hideEditModal">取消</b-btn>
                 </div>
             </b-modal>
@@ -121,11 +127,14 @@ export default {
     return {
       firebaseRef: firebase.database().ref(),
       loggedIn: false,
+      pros: [
+        '仲裁', '银行与融资', '测试领域1', '测试领域2', '测试领域3', '证券'
+      ],
       staffs: [
         {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
       ],
       lawWannaEdit: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: { pro: '' }},
-      lawPros: {},
+      lawPros: [],
       lawWannaDelete: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}},
       options: [
         { value: '律师', text: '律师' },
@@ -136,6 +145,7 @@ export default {
   },
 
   created: function () {
+    console.log('created')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.loggedIn = true
@@ -151,13 +161,17 @@ export default {
 
   methods: {
     edLawyer (obj) {
+      this.lawPros = []
       this.lawWannaEdit = obj
-      this.lawPros = this.lawWannaEdit.profession
-      console.log(this.lawPros)
+      for (var pro in this.lawWannaEdit.profession) {
+        this.lawPros.push(this.lawWannaEdit.profession[pro])
+      }
     },
+
     delLawyer (obj) {
       this.lawWannaDelete = obj
     },
+
     deleteLawyer: function () {
       for (var lawyer in this.staffs) {
         if (this.staffs[lawyer] === this.lawWannaDelete) {
@@ -169,17 +183,40 @@ export default {
       this.$refs.deleteModal.hide()
       location.reload()
     },
+
     hideDeleteModal () {
       this.$refs.deleteModal.hide()
     },
+
     hideEditModal () {
       this.$refs.editModal.hide()
+    },
+
+    saveEdit: function () {
+      for (var lawyer in this.staffs) {
+        if (this.staffs[lawyer] === this.lawWannaEdit) {
+          this.staffs[lawyer].profession = {}
+          for (var val in this.lawPros) {
+            this.staffs[lawyer].profession[val] = this.lawPros[val]
+          }
+          break
+        }
+      }
+      this.firebaseRef.child('Staffs').set(this.staffs)
+      this.$refs.editModal.hide()
+      location.reload()
     }
   }
 }
 </script>
 
 <style scoped>
+#backToMain {
+    position: absolute;
+    left: 20px;
+    top: 40px;
+}
+
 .deleteBtn {
     color: red; 
     display: inline;

@@ -74,16 +74,13 @@ export default {
           this.eM = true
           this.dismissCountDown = this.dismissSecs
         }
+      })
 
-        firebase.auth().onAuthStateChanged((user) => {
-          if (user) {
-            console.log('signed in')
-            this.$router.push('/admin-main')
-          } else {
-            console.log('loggin fail')
-            this.loading = false
-          }
-        })
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          console.log('signed in')
+          this.$router.push('/admin-main')
+        }
       })
     },
 

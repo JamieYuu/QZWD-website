@@ -16,7 +16,7 @@
                         </b-col>
                         <b-col></b-col><b-col></b-col><b-col></b-col>
                         <b-col>
-                            <b-btn class="buttons" variant="success">添加合伙人 <i class="fa fa-plus" aria-hidden="true"></i></b-btn>
+                            <b-btn v-b-modal.modal-addNew @click="addNew" class="buttons" variant="success">添加律师 <i class="fa fa-plus" aria-hidden="true"></i></b-btn>
                         </b-col>
                     </b-row>
                 </b-container>
@@ -47,6 +47,73 @@
                 <div slot="modal-footer">
                     <b-btn class="buttons" @click="deleteLawyer" variant="danger">删除</b-btn>
                     <b-btn class="buttons" variant="secondary" @click="hideDeleteModal">取消</b-btn>
+                </div>
+            </b-modal>
+
+            <b-modal ref="addNewModal" id="modal-addNew" centered title="添加律师" size="lg">
+                <h4>添加律师{{lawWannaAdd.name}}</h4>
+                <br/>
+                <b-container>
+                    <b-row>
+                        <b-col>
+                            <label>姓名: </label>
+                            <input v-model="lawWannaAdd.name"/>
+                        </b-col>
+                        <b-col>
+                            <label>邮箱: </label>
+                            <input v-model="lawWannaAdd.email"/>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <label>手机: </label>
+                            <input v-model="lawWannaAdd.phone"/>
+                        </b-col>
+                        <b-col>
+                            <label>联系方式: </label>
+                            <input v-model="lawWannaAdd.oPhone"/>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <br/>
+                            <label>描述: </label>
+                            <b-form-textarea v-model="lawWannaAdd.desc"></b-form-textarea>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <br/>
+                            <label>职位: </label>
+                            <b-form-select v-model="lawWannaAdd.position" :options="options"></b-form-select>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <br/>
+                            <label>专业领域: </label>
+                            <template v-for=" val in pros">
+                                <div :key="val.id">
+                                <input type="checkbox" :id="val.id" :value="val" v-model="lawPros">
+                                <label :for="val.id">{{val}}</label>
+                                </div>
+                            </template>
+                        </b-col>
+                    </b-row>
+                    <template v-if="this.lawWannaAdd.position != '律师'">
+                    <b-row>
+                        <b-col>
+                            <br/>
+                            <p>图片</p>
+                            <b-form-file id="file_input1" v-model="file"></b-form-file>
+                            <p>Selected file: {{file && file.name}}</p>
+                        </b-col>
+                    </b-row>
+                    </template>
+                </b-container>
+                <div slot="modal-footer">
+                    <b-btn class="buttons" @click="saveNew" variant="success">添加</b-btn>
+                    <b-btn class="buttons" variant="secondary" @click="hideAddNewModal">取消</b-btn>
                 </div>
             </b-modal>
 
@@ -100,6 +167,17 @@
                             </template>
                         </b-col>
                     </b-row>
+                    <template v-if="this.lawWannaEdit.position != '律师'">
+                    <b-row>
+                        <b-col>
+                            <br/>
+                            <p>图片</p>
+                            <b-img :src="thePicSrc" />
+                            <b-form-file id="file_input1" v-model="file"></b-form-file>
+                            <p>Selected file: {{file && file.name}}</p>
+                        </b-col>
+                    </b-row>
+                    </template>
                 </b-container>
                 <div slot="modal-footer">
                     <b-btn class="buttons" @click="saveEdit" variant="success">保存</b-btn>
@@ -115,6 +193,7 @@
                 <router-link to="/">返回首页</router-link>
             </p>
         </template>
+
         <theBottom/>
   </div>
 </template>
@@ -126,6 +205,11 @@ export default {
   data () {
     return {
       firebaseRef: firebase.database().ref(),
+      fireStorageRef: firebase.storage().ref(),
+      thePicRef: '',
+      thePicSrc: '',
+      file: null,
+      fileEdit: null,
       loggedIn: false,
       pros: [
         '仲裁', '银行与融资', '测试领域1', '测试领域2', '测试领域3', '证券'
@@ -134,6 +218,7 @@ export default {
         {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
       ],
       lawWannaEdit: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: { pro: '' }},
+      lawWannaAdd: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}},
       lawPros: [],
       lawWannaDelete: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}},
       options: [
@@ -153,6 +238,7 @@ export default {
         this.loggedIn = false
       }
     })
+
     this.firebaseRef.child('Staffs').on('value', (datasnap) => {
       var some = datasnap.val()
       this.staffs = some
@@ -161,11 +247,37 @@ export default {
 
   methods: {
     edLawyer (obj) {
+      this.file = null
+      this.thePicSrc = ''
       this.lawPros = []
       this.lawWannaEdit = obj
       for (var pro in this.lawWannaEdit.profession) {
         this.lawPros.push(this.lawWannaEdit.profession[pro])
       }
+      if (this.lawWannaEdit.position !== '律师') {
+        var pathName = 'Staffs/' + this.lawWannaEdit.name
+        this.fireStorageRef.child(pathName).getDownloadURL().then((url) => {
+          this.thePicSrc = url
+        })
+      }
+    },
+
+    addNew: function () {
+      this.file = null
+      this.lawPros = []
+      this.lawWannaAdd = {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
+    },
+
+    saveNew: function () {
+      for (var val in this.lawPros) {
+        this.lawWannaAdd.profession[val] = this.lawPros[val]
+      }
+      this.firebaseRef.child('Staffs').push(this.lawWannaAdd)
+      var pathName = 'Staffs/' + this.lawWannaAdd.name
+      this.fireStorageRef.child(pathName).put(this.file).then((snapshot) => {
+        console.log('Uploaded a blob or file!')
+      })
+      this.$refs.addNewModal.hide()
     },
 
     delLawyer (obj) {
@@ -192,6 +304,10 @@ export default {
       this.$refs.editModal.hide()
     },
 
+    hideAddNewModal () {
+      this.$refs.addNewModal.hide()
+    },
+
     saveEdit: function () {
       for (var lawyer in this.staffs) {
         if (this.staffs[lawyer] === this.lawWannaEdit) {
@@ -203,8 +319,14 @@ export default {
         }
       }
       this.firebaseRef.child('Staffs').set(this.staffs)
+      if (this.lawWannaEdit.position !== '律师' && this.file !== null) {
+        var pathName = 'Staffs/' + this.lawWannaEdit.name
+        console.log(pathName)
+        this.fireStorageRef.child(pathName).put(this.file).then((snapshot) => {
+          console.log('Uploaded a blob or file!')
+        })
+      }
       this.$refs.editModal.hide()
-      location.reload()
     }
   }
 }

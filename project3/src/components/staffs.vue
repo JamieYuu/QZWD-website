@@ -24,9 +24,6 @@
                                 <b-col>
                                 <div>
                                 <b-card :title="ele.name"
-                                :img-src="logoURL"
-                                img-alt="Image"
-                                img-top
                                 tag="article"
                                 style="width: 16rem;"
                                 class="mb-2">
@@ -35,7 +32,7 @@
                                 <p class="card-text">电话 {{ele.phone}}</p>
                                 <p class="card-text">邮箱 {{ele.email}}</p>
                                 <div style="text-align: center">
-                                <b-btn v-on:click="getTarget(ele)" v-b-modal.modal1 variant="outline-primary">详细资料</b-btn>
+                                <b-btn v-on:click="getTarget(ele)" id="detailBtn" v-b-modal.modal1 variant="outline-primary">详细资料</b-btn>
                                 </div>
                                 </div>
                                 </b-card>
@@ -89,7 +86,7 @@
                 header-text-variant="light">
 
                 <b-media right-align vertical-align="center">
-                    <b-img slot="aside" blank width="200" blank-color="#ccc"/>
+                    <b-img slot="aside" :src="target.iSrc" width="200"/>
                     <h5 class="mt-0 mb-1">{{target.position}}</h5>
                     <div style="line-height: 6px">
                         <br/><br/><br/>
@@ -121,10 +118,12 @@ export default {
   data () {
     return {
       firebaseRef: firebase.database().ref(),
+      fireStorageRef: firebase.storage().ref(),
       logoURL: require('@/assets/logo.jpg'),
       headerImg: require('@/assets/STFImg.jpg'),
       wxImg: require('@/assets/wx.jpeg'),
       filter: null,
+      thePicSrc: null,
       form: {
         name: '',
         professional: null
@@ -138,13 +137,14 @@ export default {
       staffs: {
         staff: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
       },
-      target: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}},
+      target: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}, imageSrc: ''},
       hhrStaffs: [
-        {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
+        {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}, imageSrc: ''}
       ],
       lsStaffs: [
         {姓名: '', 邮箱: '', 联系电话: '', 专业领域: []}
       ],
+      picUrl: null,
       currentPage: 1,
       perPage: 10,
       totalRows: 0
@@ -155,9 +155,17 @@ export default {
 
   },
 
+  computed: {
+  },
+
   methods: {
     getTarget: function (selectLawyer) {
       this.target = selectLawyer
+      var pathName = 'Staffs/' + this.target.name
+      this.fireStorageRef.child(pathName).getDownloadURL().then((url) => {
+        this.target.iSrc = url
+      })
+      console.log(this.target)
     },
     onFiltered (filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
@@ -167,13 +175,17 @@ export default {
   },
 
   created: function () {
+    console.log('created')
+
     this.firebaseRef.child('Staffs').on('value', (datasnap) => {
       var some = datasnap.val()
       this.staffs = some
     })
     for (var theStaff in this.staffs) {
       var staffObj = this.staffs[theStaff]
-      if (staffObj.position === '律师') {
+      if (staffObj.position.includes('合伙人')) {
+        this.hhrStaffs.push(staffObj)
+      } else {
         var profe = []
         for (var profObj in staffObj.profession) {
           profe.push(staffObj.profession[profObj])
@@ -185,8 +197,6 @@ export default {
           专业领域: profe
         }
         this.lsStaffs.push(addStaff)
-      } else {
-        this.hhrStaffs.push(staffObj)
       }
     }
     this.hhrStaffs.shift()
@@ -275,5 +285,10 @@ export default {
 
 #buttons:hover {
     color: rgb(6, 132, 228);
+    cursor: pointer;
+}
+
+#detailBtn:hover {
+    cursor: pointer;
 }
 </style>

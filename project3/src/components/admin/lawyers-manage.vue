@@ -2,7 +2,7 @@
   <div>
         <template v-if="loggedIn">
             <div id="backToMain">
-                <router-link to="/admin/admin-login">管理员首页</router-link>
+                <router-link to="/admin-main">管理员首页</router-link>
             </div>
             <div style="text-align: center; margin-top: 80px">
                 <h3>律师管理</h3>
@@ -12,7 +12,7 @@
                 <b-container>
                     <b-row>
                         <b-col>
-                            <p style="font-size: 24px">合伙人列表</p>
+                            <p style="font-size: 24px">律师列表</p>
                         </b-col>
                         <b-col></b-col><b-col></b-col><b-col></b-col>
                         <b-col>

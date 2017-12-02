@@ -6,9 +6,9 @@
             <b-container>
                 <b-row>
                     <b-col></b-col>
+                    <b-col><b-img id="logoImg" :src="logoImg"/></b-col>
                     <b-col>
                         <div id="wx2wmpart">
-                            <i class="fa fa-weixin fa-2x"></i>
                             <b-img id="wx2wm" :src="wxImg" />
                         </div>
                     </b-col>
@@ -35,7 +35,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 export default {
   data () {
     return {
-      wxImg: require('@/assets/wx.jpeg')
+      wxImg: require('@/assets/wx.jpeg'),
+      logoImg: require('@/assets/logo.jpg')
     }
   },
 
@@ -51,6 +52,10 @@ export default {
 </script>
 
 <style>
+#logoImg {
+    width: 130px;
+}
+
 #tablebuttons {
     color: white;
     cursor: pointer;

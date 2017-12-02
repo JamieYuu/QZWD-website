@@ -73,15 +73,6 @@ export default {
     getHref: function (name) {
       var hrefPath = '#' + name
       return hrefPath
-    },
-
-    scrollIntoView (evt) {
-      evt.preventDefault()
-      const href = evt.target.getAttribute('href')
-      const el = href ? document.querySelector(href) : null
-      if (el) {
-        this.$refs.content.scrollTop = el.offsetTop
-      }
     }
   },
 

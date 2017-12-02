@@ -53,7 +53,6 @@
                             type="text" v-model="filter"
                             placeholder="输入关键字(eg: 姓名,职业领域, etc.)">
                         </b-form-input>
-                        </b-form-group>
                 </b-form>
                 <br/>
 
@@ -119,21 +118,10 @@ export default {
     return {
       firebaseRef: firebase.database().ref(),
       fireStorageRef: firebase.storage().ref(),
-      logoURL: require('@/assets/logo.jpg'),
       headerImg: require('@/assets/STFImg.jpg'),
       wxImg: require('@/assets/wx.jpeg'),
       filter: null,
       thePicSrc: null,
-      form: {
-        name: '',
-        professional: null
-      },
-      possitions: [
-        { text: '全部', value: null }, '高级合伙人', '二级合伙人', '专业律师'
-      ],
-      professionals: [
-        { text: '全部', value: null }, '仲裁', '啦啦啦', '嘿', '业务4'
-      ],
       staffs: {
         staff: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
       },
@@ -144,7 +132,6 @@ export default {
       lsStaffs: [
         {姓名: '', 邮箱: '', 联系电话: '', 专业领域: []}
       ],
-      picUrl: null,
       currentPage: 1,
       perPage: 10,
       totalRows: 0
@@ -178,8 +165,7 @@ export default {
     console.log('created')
 
     this.firebaseRef.child('Staffs').on('value', (datasnap) => {
-      var some = datasnap.val()
-      this.staffs = some
+      this.staffs = datasnap.val()
     })
     for (var theStaff in this.staffs) {
       var staffObj = this.staffs[theStaff]

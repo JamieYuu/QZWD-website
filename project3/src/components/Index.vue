@@ -36,14 +36,86 @@
             <b-row>
               <b-col></b-col>
               <b-col>
-                <p style="font-size: 30px">新闻</p>
+                <p style="font-size: 30px; white-space: pre;">     新闻</p>
               </b-col>
+              <b-col></b-col><b-col></b-col>
               <b-col>
-                <p style="font-size: 30px">业绩</p>
+                <p style="font-size: 30px; white-space: pre;">     业绩</p>
               </b-col>
               <b-col></b-col>
             </b-row>
+            <b-row>
+              <b-col>
+                <ul style="list-style: none;">
+                  <li>
+                    <b-card title="文章标题"
+                        sub-title="10/10/2017">
+                      <p class="card-text">
+                        Some quick example text to build on the <em>card title</em> and make up the bulk of the card's content.
+                      </p>
+                      <router-link to="/">阅读详情 <i class="fa fa-chevron-right" aria-hidden="true"></i></router-link>
+                    </b-card>
+                    <br/>
+                    <b-card title="文章标题"
+                        sub-title="10/10/2017">
+                      <p class="card-text">
+                        Some quick example text to build on the <em>card title</em> and make up the bulk of the card's content.
+                      </p>
+                      <router-link to="/">阅读详情 <i class="fa fa-chevron-right" aria-hidden="true"></i></router-link>
+                    </b-card>
+                    <br/>
+                    <b-card title="文章标题"
+                        sub-title="10/10/2017">
+                      <p class="card-text">
+                        Some quick example text to build on the <em>card title</em> and make up the bulk of the card's content.
+                      </p>
+                      <router-link to="/">阅读详情 <i class="fa fa-chevron-right" aria-hidden="true"></i></router-link>
+                    </b-card>
+                    <br/>
+                  </li>
+                </ul>
+              </b-col>
+              <b-col>
+                <ul style="list-style: none;">
+                  <li>
+                    <b-card title="文章标题"
+                        sub-title="10/10/2017">
+                      <p class="card-text">
+                        Some quick example text to build on the <em>card title</em> and make up the bulk of the card's content.
+                      </p>
+                      <router-link to="/">阅读详情 <i class="fa fa-chevron-right" aria-hidden="true"></i></router-link>
+                    </b-card>
+                    <br/>
+                    <b-card title="文章标题"
+                        sub-title="10/10/2017">
+                      <p class="card-text">
+                        Some quick example text to build on the <em>card title</em> and make up the bulk of the card's content.
+                      </p>
+                      <router-link to="/">阅读详情 <i class="fa fa-chevron-right" aria-hidden="true"></i></router-link>
+                    </b-card>
+                    <br/>
+                    <b-card title="文章标题"
+                        sub-title="10/10/2017">
+                      <p class="card-text">
+                        Some quick example text to build on the <em>card title</em> and make up the bulk of the card's content.
+                      </p>
+                      <router-link to="/">阅读详情 <i class="fa fa-chevron-right" aria-hidden="true"></i></router-link>
+                    </b-card>
+                    <br/>
+                  </li>
+                </ul>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-btn variant="warning" id="lookMore" class="buttons">查看更多</b-btn>
+              </b-col>
+            </b-row>
           </b-container>
+
+          <div>
+            
+          </div>
     <br/>
     <hr/>
     <theBottom />
@@ -77,6 +149,15 @@ export default {
 </script>
 
 <style scoped>
+#lookMore {
+  border-radius: 60px;
+  color: white
+}
+
+.buttons:hover {
+  cursor: pointer;
+}
+
 hr {
   border-width: 3px;
   margin-left: 100px;
@@ -85,6 +166,7 @@ hr {
 
 #wholePage {
     height: 100%;
+    background-color: rgb(240, 240, 240)
 }
 
 #buttons {

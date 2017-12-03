@@ -7,15 +7,11 @@ import Staffs from '@/components/staffs'
 import ArticlesAndNews from '@/components/articles-and-news'
 import Articles from '@/components/news/articles'
 import TheArticle from '@/components/news/the-article'
-import BankFinance from '@/components/business/bank-finance'
-import Arbitration from '@/components/business/arbitration'
-import CompetitionTradeSupervision from '@/components/business/competition-trade-Supervision'
-import RealEstate from '@/components/business/real-estate'
-import IntellectualProperty from '@/components/business/intellectual-property'
 import Error from '@/components/error'
 import AdminLogin from '@/components/admin-login'
 import AdminMain from '@/components/adminMain'
 import LawyerManage from '@/components/admin/lawyers-manage'
+import TheBusiness from '@/components/the-business'
 
 Vue.use(Router)
 
@@ -76,33 +72,9 @@ export default new Router({
     },
 
     {
-      path: '/business/bank-finance',
-      name: 'bankFinance',
-      component: BankFinance
-    },
-
-    {
-      path: '/business/arbitration',
-      name: 'arbitration',
-      component: Arbitration
-    },
-
-    {
-      path: '/business/competition-trade-Supervision',
-      name: 'competitionTradeSupervision',
-      component: CompetitionTradeSupervision
-    },
-
-    {
-      path: '/business/real-estate',
-      name: 'realEstate',
-      component: RealEstate
-    },
-
-    {
-      path: '/business/intellectual-property',
-      name: 'intellectualProperty',
-      component: IntellectualProperty
+      path: '/the-business/:id',
+      name: 'theBusiness',
+      component: TheBusiness
     },
 
     {

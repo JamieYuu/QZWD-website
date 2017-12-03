@@ -9,32 +9,20 @@
                         <b-btn variant="link" id="buttons"><router-link id="buttons" to="/staffs">律师团队</router-link></b-btn>
                         <b-btn variant="link" id="buttons">成功案例</b-btn>
                         <b-btn variant="link" id="buttons" v-b-toggle.newsCL><router-link id="buttons" to="/articles-and-news">新闻与文章</router-link></b-btn>
-                        <b-btn variant="link" id="buttons">律所文化和党建</b-btn>
                     <b-collapse id="ywlyCL">
                         <b-card id="ywlyDD">
-                            <table id="ywlyDDtable">
-                                <tbody>
-                                <tr>
-                                    <td><b-btn variant="link" id="tablebuttons"><router-link id="buttons" to="/all-business">全部</router-link></b-btn></td>
-                                    <td><b-btn variant="link" id="tablebuttons"><router-link id="buttons" to="/business/competition-trade-Supervision">竞争,贸易与监管</router-link></b-btn></td>
-                                    <td><b-btn variant="link" id="tablebuttons">私募股权</b-btn></td>
-                                </tr>
-                                <tr>
-                                    <td><b-btn variant="link" id="tablebuttons"><router-link id="buttons" to="/business/intellectual-property">知识产权</router-link></b-btn></td>
-                                    <td><b-btn variant="link" id="tablebuttons"><router-link id="buttons" to="/business/real-estate">房地产</router-link></b-btn></td>
-                                    <td><b-btn variant="link" id="tablebuttons">争议解决与诉讼</b-btn></td>
-                                </tr>
-                                <tr>
-                                    <td><b-btn variant="link" id="tablebuttons"><router-link id="buttons" to="/business/bank-finance">银行与融资</router-link></b-btn></td>
-                                    <td><b-btn variant="link" id="tablebuttons">破产重组</b-btn></td>
-                                    <td><b-btn variant="link" id="tablebuttons">税务</b-btn></td>
-                                </tr>
-                                <tr>
-                                    <td><b-btn variant="link" id="tablebuttons"><router-link id="buttons" to="/business/arbitration">仲裁</router-link></b-btn></td>
-                                    <td><b-btn variant="link" id="tablebuttons">证券</b-btn></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <b-container id="ywlyDDtable">
+                                <b-row>
+                                <b-col>
+                                    <b-btn variant="link" id="tablebuttons"><router-link id="buttons" to="/all-business">全部</router-link></b-btn>
+                                </b-col>
+                                <template v-for="list in lists">
+                                    <b-col :key="list.id">
+                                        <b-btn variant="link" id="tablebuttons"><router-link id="buttons" :to="list.path">{{list.title}}</router-link></b-btn></b-col>
+                                    </b-col>
+                                </template>
+                                </b-row>
+                            </b-container>
                         </b-card>
                     </b-collapse>
                 </div>
@@ -53,16 +41,28 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import firebase from 'firebase'
 
 export default {
   data () {
     return {
+      firebaseRef: firebase.database().ref(),
       infoP: '  Q Z  & W D (JIANG XI)   L A W    F I R M',
-      logoURL: require('@/assets/logo.jpg')
+      logoURL: require('@/assets/logo.jpg'),
+      business: {},
+      lists: []
     }
   },
 
   created: function () {
+    this.firebaseRef.child('Business').on('value', (datasnap) => {
+      this.business = datasnap.val()
+      for (var ele in this.business) {
+        this.lists.push(
+          { title: this.business[ele].title, path: '/the-business/:' + this.business[ele].title }
+        )
+      }
+    })
   },
 
   computed: {

@@ -35,7 +35,10 @@
                         <b-tab :key="ele.id" :title="ele.title">
                             <ul>
                                 <template v-for="list in ele.lists">
-                                    <li :key="list.id">{{list}}</li>
+                                    <li :key="list.id">
+                                        {{list.subtitle}}
+                                        <p>{{list.description}}</p>
+                                    </li>
                                 </template>
                             </ul>
                         </b-tab>
@@ -58,15 +61,8 @@ export default {
   data () {
     return {
       firebaseRef: firebase.database().ref(),
-      infoP: '  Q Z  & W D (JIANG XI)   L A W    F I R M',
-      logoURL: require('@/assets/logo.jpg'),
-      wxImg: require('@/assets/wx.jpeg'),
-      title1: ['知识产权', '银行与融资', '仲裁', '竞争,贸易与监管', '房地产'],
-      title2: ['破产重组', '私募股权', '争议解决与诉讼', '税务', '证券'],
       name: '',
-      allBusiness: {
-        FDC: {title: '', lists: {}}
-      }
+      allBusiness: {}
     }
   },
 
@@ -79,6 +75,7 @@ export default {
   },
 
   created: function () {
+    console.log('created')
     this.firebaseRef.child('Business').on('value', (datasnap) => {
       var some = datasnap.val()
       this.allBusiness = some

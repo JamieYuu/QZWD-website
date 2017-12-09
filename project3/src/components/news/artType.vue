@@ -1,0 +1,287 @@
+<template>
+    <div id="wholePage">
+        <div id="indexbody">
+            <theHeader/>
+
+            <div id="headerImgPart">
+                <b-img id="headerImg" :src="headerImg"/>
+                <div id="aboutUsTextDiv">
+                    <p id="aboutUsText">{{pageTitle}}</p>
+                </div>
+            </div>
+
+            <br/>
+            <div id="suoying">
+                <p><router-link to="/articles-and-news">新闻与文章 </router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> {{pageTitle}}</p>
+            </div>
+            <hr id="hr1">
+
+            <div id="searchDiv">
+                <p style="font-size: 24px; margin-left: 100px">文章筛选</p>
+                <b-form>
+                <b-container>
+                    <b-row>
+                        <b-col cols="1"></b-col>
+                        <b-col>
+                            <b-form-input id="keyWordInput"
+                                type="text" v-model="keyword"
+                                placeholder="输入关键词">
+                            </b-form-input>
+                        </b-col>
+                        <b-col>
+                            <b-form-select id="businessSelect"
+                                :options="selects"
+                                v-model="select">
+                            </b-form-select>
+                        </b-col>
+                        <b-col cols="1"></b-col>
+                    </b-row>
+                    <br/>
+                    <div class="datePicker">
+                    <b-row>
+                        <b-col cols="1"></b-col>
+                        <b-col>
+                            <p>以发布时间筛选文章:</p>
+                        </b-col>
+                        <b-col>
+                            <flat-pickr v-model="startDate" placeholder="起始日期"></flat-pickr>
+                        </b-col>
+                        <b-col cols="1">至</b-col>
+                        <b-col>
+                            <flat-pickr v-model="endDate" placeholder="终止日期"></flat-pickr>
+                        </b-col>
+                    </b-row>
+                    </div>
+                </b-container>
+                </b-form>
+            </div>
+
+            <hr id="hr1">
+
+            <div id="articleDiv">
+                <b-container>
+                    <b-row>
+                        <template v-for="obj in this.resArts">
+                            <b-col :key="obj.id">
+                                <div id="single-article">
+                                    <p class="articleTitle">{{obj.title}}</p>
+                                    <p class="articleDes">{{obj.des}}</p>
+                                    <p class="articleDate">{{obj.date}}</p>
+                                    <div style="text-align: center">
+                                        <router-link :to="articleUrl(obj.url)">阅读 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
+                                    </div>
+                                    <br/>
+                                </div>
+                            </b-col>
+                        </template>
+                    </b-row>
+                </b-container>
+            </div>
+
+            <hr id="hr1">
+
+        </div>
+        <theBottom/>
+    </div>
+  
+</template>
+
+<script>
+import firebase from 'firebase'
+
+export default {
+  data () {
+    return {
+      firebaseRef: firebase.database().ref(),
+      headerImg: require('@/assets/KLDImg.jpg'),
+      pageTitle: '',
+      keyword: '',
+      select: null,
+      startDate: null,
+      endDate: null,
+      pathName: this.$route.params.id.slice(1),
+      articles: {},
+      resArts: [],
+      selects: [{ text: '全部业务领域', value: null }]
+    }
+  },
+
+  watch: {
+    keyword: function () {
+      console.log(this.keyword)
+    }
+  },
+
+  created: function () {
+    console.log('created')
+    switch (this.pathName) {
+      case 'WZ': this.pageTitle = '文章'
+        break
+      case 'SWSXW': this.pageTitle = '事务所新闻'
+        break
+      case 'FGJD': this.pageTitle = '法规解读'
+        break
+    }
+
+    this.firebaseRef.child('Ariticles').on('value', (datasnap) => {
+      this.articles = datasnap.val()
+      for (var obj in this.articles) {
+        if (this.articles[obj].ZL === this.pathName) {
+          this.articles[obj].url = obj
+          this.resArts.push(this.articles[obj])
+        }
+      }
+    })
+
+    this.firebaseRef.child('Business').on('value', (datasnap) => {
+      var business = datasnap.val()
+      for (var obj in business) {
+        var typeObj = {
+          text: business[obj].title,
+          value: business[obj].title
+        }
+        this.selects.push(typeObj)
+      }
+    })
+  },
+
+  components: {
+
+  },
+
+  methods: {
+    articleUrl: function (url) {
+      return '/news/the-article/:' + url
+    }
+  }
+}
+</script>
+
+<style scoped>
+.datePicker {
+    font-size: 18px;
+}
+
+#single-article {
+    width: 300px;
+}
+
+.articleTitle {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.articleDes {
+    font-size: 14px;
+}
+
+.articleDate {
+    font-style: italic;
+    font-size: 12px;
+}
+
+#linkButton:hover {
+    color: white;
+}
+
+#articleDiv {
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+#publishTime {
+    font-size: 10px;
+    font-style: italic;
+}
+
+.lawyerDescription {
+    font-size: 14px;
+}
+
+#bodyLeftPart {
+    border-right: thin solid gray;
+}
+
+.mainBodyTextInf {
+    color: gray;
+}
+
+.mainBodyTextTitle {
+    font-size: 28px;
+}
+
+#mainBodyText {
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+#suoying {
+    font-size: 24px;
+    margin-left: 100px;
+}
+
+#aboutUsBody {
+
+}
+
+#hr3 {
+    border-width: 3px;
+    margin-top: 0px;
+}
+
+#hr1 {
+    margin-left: 100px;
+    margin-right: 100px;
+    border-width: 3px;
+    margin-top: 0px;
+}
+
+#bodyTitle {
+    margin-top: 10px;
+    vertical-align: bottom;
+    font-size: 30px;
+    padding-left: 200px;
+}
+
+#introText {
+    margin-left: 200px;
+}
+
+.bodyText {
+    color: gray;
+}
+
+#aboutUsTextDiv {
+    font-size: 30px;
+    font-weight: 600;
+    color: white;
+    background-color: rgb(37, 146, 221);
+    z-index: 2;
+    position: absolute;
+    top: 350px;
+    left: 150px;
+    width: 160px;
+    text-align: center;
+    height: 50px;
+    box-shadow: 8px 8px 5px rgb(60, 68, 80);
+}
+
+#headerImg {
+    width:100%;
+}
+
+#wholePage {
+    background-color: white;
+    height: 100%;
+}
+
+#buttons {
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+#buttons:hover {
+    color: rgb(6, 132, 228);
+}
+</style>

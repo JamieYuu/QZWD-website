@@ -12,16 +12,6 @@
                         <p id="allBusinessTitle">  业务领域</p>
                     </b-col>
                     <b-col>
-                        <template>
-                            <b-form-group
-                            id="fieldset1"
-                            label="搜索相关业务"
-                            :feedback="feedback" 
-                            :state="state"
-                            >
-                            <b-form-input id="input1" :state="state" v-model.trim="name"></b-form-input>
-                            </b-form-group>
-                        </template>
                     </b-col>
                     <b-col></b-col>
                 </b-row>

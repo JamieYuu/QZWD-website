@@ -5,9 +5,7 @@
 
             <div id="headerImgPart">
                 <b-img id="headerImg" :src="headerImg"/>
-                <div id="aboutUsTextDiv">
-                    <p id="aboutUsText">律师团队</p>
-                </div>
+                <b-btn variant="primary" id="aboutUsTextDiv" class="md-elevation-7">律师团队</b-btn>
             </div>
 
             <br/>
@@ -16,10 +14,41 @@
 
             <div id="mainBodyDiv">
 
-                <p style="font-size: 20px">合伙人</p>
+                <p style="font-size: 20px">高级合伙人</p>
                 <b-container>
                     <b-row>
                         <template v-for="ele in hhrStaffs">
+                            <div :key="ele.id">
+                                <b-col>
+                                <div>
+                                <b-card :title="ele.name"
+                                :img-src="wxImg"
+                                tag="article"
+                                style="width: 16rem;"
+                                class="mb-2">
+                                <div class="cardInfo">
+                                <p class="card-text">{{ele.position}}</p>
+                                <p class="card-text">电话 {{ele.phone}}</p>
+                                <p class="card-text">邮箱 {{ele.email}}</p>
+                                <div style="text-align: center">
+                                <b-btn v-on:click="getTarget(ele)" id="detailBtn" v-b-modal.modal1 variant="outline-primary">详细资料</b-btn>
+                                </div>
+                                </div>
+                                </b-card>
+                                </div>
+                                </b-col>
+                            </div>
+                        </template>
+                    </b-row>
+                    <br/>
+                </b-container>
+
+                <hr style="border-width: 3px">
+
+                <p style="font-size: 20px">二级合伙人</p>
+                <b-container>
+                    <b-row>
+                        <template v-for="ele in ejStaffs">
                             <div :key="ele.id">
                                 <b-col>
                                 <div>
@@ -36,7 +65,7 @@
                                 </div>
                                 </div>
                                 </b-card>
-                            </div>
+                                </div>
                                 </b-col>
                             </div>
                         </template>
@@ -122,16 +151,11 @@ export default {
       wxImg: require('@/assets/wx.jpeg'),
       filter: null,
       thePicSrc: null,
-      staffs: {
-        staff: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
-      },
-      target: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}, imageSrc: ''},
-      hhrStaffs: [
-        {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}, imageSrc: ''}
-      ],
-      lsStaffs: [
-        {姓名: '', 邮箱: '', 联系电话: '', 专业领域: []}
-      ],
+      staffs: {},
+      target: {},
+      hhrStaffs: [],
+      ejStaffs: [],
+      lsStaffs: [],
       currentPage: 1,
       perPage: 10,
       totalRows: 0
@@ -166,28 +190,29 @@ export default {
 
     this.firebaseRef.child('Staffs').on('value', (datasnap) => {
       this.staffs = datasnap.val()
-    })
-    for (var theStaff in this.staffs) {
-      var staffObj = this.staffs[theStaff]
-      if (staffObj.position.includes('合伙人')) {
-        this.hhrStaffs.push(staffObj)
-      } else {
-        var profe = []
-        for (var profObj in staffObj.profession) {
-          profe.push(staffObj.profession[profObj])
+
+      for (var theStaff in this.staffs) {
+        var staffObj = this.staffs[theStaff]
+        if (staffObj.position === '高级合伙人') {
+          this.hhrStaffs.push(staffObj)
+        } else if (staffObj.position === '律师') {
+          var profe = []
+          for (var profObj in staffObj.profession) {
+            profe.push(staffObj.profession[profObj])
+          }
+          var addStaff = {
+            姓名: staffObj.name,
+            邮箱: staffObj.email,
+            联系电话: staffObj.phone,
+            专业领域: profe
+          }
+          this.lsStaffs.push(addStaff)
+        } else {
+          this.ejStaffs.push(staffObj)
         }
-        var addStaff = {
-          姓名: staffObj.name,
-          邮箱: staffObj.email,
-          联系电话: staffObj.phone,
-          专业领域: profe
-        }
-        this.lsStaffs.push(addStaff)
       }
-    }
-    this.hhrStaffs.shift()
-    this.lsStaffs.shift()
-    this.totalRows = Math.ceil(this.lsStaffs.length / this.perPage)
+      this.totalRows = Math.ceil(this.lsStaffs.length / this.perPage)
+    })
   }
 }
 </script>

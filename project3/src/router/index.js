@@ -5,7 +5,7 @@ import AboutUs from '@/components/aboutUs'
 import AllBusiness from '@/components/allBusiness'
 import Staffs from '@/components/staffs'
 import ArticlesAndNews from '@/components/articles-and-news'
-import Articles from '@/components/news/articles'
+import ArtType from '@/components/news/artType'
 import TheArticle from '@/components/news/the-article'
 import Error from '@/components/error'
 import AdminLogin from '@/components/admin-login'
@@ -60,9 +60,9 @@ export default new Router({
     },
 
     {
-      path: '/articles',
-      name: 'articles',
-      component: Articles
+      path: '/news/article-type/:id',
+      name: 'artType',
+      component: ArtType
     },
 
     {

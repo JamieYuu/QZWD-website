@@ -5,9 +5,7 @@
 
             <div id="headerImgPart">
                 <b-img id="headerImg" :src="headerImg"/>
-                <div id="aboutUsTextDiv">
-                    <p id="aboutUsText">新闻与文章</p>
-                </div>
+                <b-btn variant="primary" id="aboutUsTextDiv" class="md-elevation-7">新闻与文章</b-btn>
             </div>
 
             <div id="aboutUsBody">
@@ -20,14 +18,14 @@
                         <b-row>
                             <b-col>
                                 <p class="articleDes">查阅我们对影响您业务的法律问题的最新见解</p>
-                                <b-btn variant="outline-primary"><router-link to="/news/articles" class="links">查阅更多文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link></b-btn>
+                                <b-btn variant="outline-primary" class="buttons" @click="toWZurl">查阅更多文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
                             </b-col>
                             <template v-for="obj in wzArticles">
                             <b-col :key="obj.id">
                                 <p class="articleTitle">{{obj.title}}</p>
-                                <p class="articleDes">{{obj.des}}</p>
                                 <p class="articleDate">{{obj.date}}</p>
-                                <b-btn v-on:click="selectArt(obj)" variant="outline-primary"><router-link :to="theUrl(obj)" class="links">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link></b-btn>
+                                <p class="articleDes">{{obj.des}}</p>
+                                <router-link :to="theUrl(obj.url)">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                             </b-col>
                             </template>
                         </b-row>
@@ -44,14 +42,14 @@
                         <b-row>
                             <b-col>
                                 <p class="articleDes">最新的求正沃德新闻与发展</p>
-                                <b-btn variant="outline-primary">更多新闻 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
+                                <b-btn variant="outline-primary" class="buttons" @click="toSWSXWurl">查阅更多新闻 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
                             </b-col>
                             <template v-for="obj in swsxwArticles">
                             <b-col :key="obj.id">
                                 <p class="articleTitle">{{obj.title}}</p>
                                 <p class="articleDes">{{obj.des}}</p>
                                 <p class="articleDate">{{obj.date}}</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
+                                <router-link :to="theUrl(obj.url)">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                             </b-col>
                             </template>
                         </b-row>
@@ -68,14 +66,14 @@
                         <b-row>
                             <b-col>
                                 <p class="articleDes">最新的法律法规解读</p>
-                                <b-btn variant="outline-primary">更多新闻 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
+                                <b-btn variant="outline-primary" class="buttons" @click="toFGJDurl">更多法规解读 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
                             </b-col>
                             <template v-for="obj in fgjdArticles">
                             <b-col :key="obj.id">
                                 <p class="articleTitle">{{obj.title}}</p>
                                 <p class="articleDes">{{obj.des}}</p>
                                 <p class="articleDate">{{obj.date}}</p>
-                                <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
+                                <router-link :to="theUrl(obj.url)">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                             </b-col>
                             </template>
                         </b-row>
@@ -99,10 +97,10 @@ export default {
     return {
       firebaseRef: firebase.database().ref(),
       headerImg: require('@/assets/KLDImg.jpg'),
-      articles: {article: {ZL: '', author: '', date: '', des: '', information: '', title: '', type: {}}},
-      wzArticles: [{article: {ZL: '', author: '', date: '', des: '', information: '', title: '', type: {}}}],
-      swsxwArticles: [{article: {ZL: '', author: '', date: '', des: '', information: '', title: '', type: {}}}],
-      fgjdArticles: [{article: {ZL: '', author: '', date: '', des: '', information: '', title: '', type: {}}}]
+      articles: {},
+      wzArticles: [],
+      swsxwArticles: [],
+      fgjdArticles: []
     }
   },
 
@@ -121,38 +119,43 @@ export default {
       for (var obj in this.articles) {
         var objArt = this.articles[obj]
         if (objArt.ZL === 'WZ') {
-          this.wzArticles.push(objArt)
+          if (this.wzArticles.length < 4) {
+            objArt.url = obj
+            this.wzArticles.push(objArt)
+          }
         }
         if (objArt.ZL === 'SWSXW') {
-          this.swsxwArticles.push(objArt)
+          if (this.swsxwArticles.length < 4) {
+            objArt.url = obj
+            this.swsxwArticles.push(objArt)
+          }
         }
         if (objArt.ZL === 'FGJD') {
-          this.fgjdArticles.push(objArt)
+          if (this.fgjdArticles.length < 4) {
+            objArt.url = obj
+            this.fgjdArticles.push(objArt)
+          }
         }
       }
     })
-    this.wzArticles.shift()
-    this.swsxwArticles.shift()
-    this.fgjdArticles.shift()
   },
 
   methods: {
     theUrl: function (obj) {
-      var url = '/news/the-article/:' + obj.title
-      console.log(url)
+      var url = '/news/the-article/:' + obj
       return url
     },
-    selectArt: function (obj) {
-      this.firebaseRef.child('SelectArticle').update({
-        ZL: obj.ZL,
-        author: obj.author,
-        date: obj.date,
-        des: obj.des,
-        information: obj.information,
-        title: obj.title,
-        type: obj.type
-      })
-      console.log('clicked')
+
+    toWZurl: function () {
+      this.$router.push('/news/article-type/:WZ')
+    },
+
+    toSWSXWurl: function () {
+      this.$router.push('/news/article-type/:SWSXW')
+    },
+
+    toFGJDurl: function () {
+      this.$router.push('/news/article-type/:FGJD')
     }
   }
 }
@@ -209,7 +212,7 @@ export default {
 }
 
 #aboutUsTextDiv {
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 600;
     color: white;
     background-color: rgb(37, 146, 221);
@@ -240,5 +243,9 @@ export default {
 
 #buttons:hover {
     color: rgb(6, 132, 228);
+}
+
+.buttons:hover {
+    cursor: pointer;
 }
 </style>

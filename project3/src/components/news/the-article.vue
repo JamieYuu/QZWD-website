@@ -1,11 +1,12 @@
 <template>
     <div id="wholePage">
         <div id="indexbody">
+            <theHeader />
 
             <br/><br/><br/><br/><br/><br/><br/><br/>
-            <p id="headerTitle">这是标题</p>
+            <p id="headerTitle">{{theArticle.title}}</p>
             <div id="suoying">
-                <p><router-link to="/knowledge">新闻与文章 </router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> <router-link to="/news/articles"> 文章</router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> 标题</p>
+                <p><router-link to="/articles-and-news">新闻与文章 </router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> <router-link to="/news/articles"> {{articleTyle(theArticle.ZL)}}</router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> {{theArticle.title}}</p>
             </div>
             <hr id="hr1">
 
@@ -15,33 +16,26 @@
                         <b-col>
                             <br/>
                             <div id="leftTextDiv">
-                            <p class="authorInf">作者: xxx (合伙人)     发布时间: 2017/11/11</p>
-                            <template v-for="n in 10">
-                            <p :key="n" class="bodyText">内容</p>
-                            </template>
+                            <p class="authorInf">作者: {{theArticle.author}}律师     发布时间: {{theArticle.date}}</p>
+                            <p class="bodyText">{{theArticle.information}}</p>
                             </div>
                         </b-col>
 
                         <b-col cols="5">
-                            <p style="font-size: 20px;"> 主要联系人</p>
-                            <b-card>
-                                <b-media no-body>
-                                    <b-media-aside vertical-align="center">
-                                        <b-img blank blank-color="#ccc" width="128" height="128" alt="placeholder" />
-                                    </b-media-aside>
-                                    <b-media-body class="ml-3">
-                                    <h6 class="mt-0">律师名字</h6>
-                                    <p class="lawyerDescription">律师职位</p>
-                                    <p class="lawyerDescription">律师介绍</p>
-                                    <p class="lawyerDescription">电话 12345678</p>
-                                    </b-media-body>
-                                </b-media>
-                            </b-card>
+                            <p style="font-size: 20px;"> 作者介绍: {{theArticle.author}} 律师</p>
+                            <p>联系方式: {{theArticle.authorPhone}} | {{theArticle.authorEmail}}</p>
+                            <p>{{theArticle.authorDes}}</p>
                         </b-col>
                     </b-row>
                 </b-container>
                 <br/>
-                <p>类别: <router-link to="/business/arbitration">仲裁</router-link> | <router-link to="/business/bank-finance">银行与融资</router-link></p>
+                <p>类别: 
+                    <template v-for="ele in theArticle.type">
+                        | 
+                        <router-link :key="ele.id" :to="typeUrl(ele)">{{ele}}</router-link>
+                         |
+                    </template>
+                </p>
             </div>
 
             <hr id="hr1">
@@ -51,30 +45,14 @@
                 <br/>
                 <b-container>
                     <b-row>
-                        <b-col>
-                            <p class="articleTitle">文章标题1</p>
-                            <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                            <p class="articleDate">2017/11/11</p>
-                            <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
+                        <template v-for="ele in relArticles">
+                        <b-col :key="ele.id">
+                            <p class="articleTitle">{{ele.title}}</p>
+                            <p class="articleDes">{{ele.des}}</p>
+                            <p class="articleDate">{{ele.date}}</p>
+                            <router-link :to="getRelUrl(ele.url)">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                         </b-col>
-                        <b-col>
-                            <p class="articleTitle">文章标题1</p>
-                            <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                            <p class="articleDate">2017/11/11</p>
-                            <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                        </b-col>
-                        <b-col>
-                            <p class="articleTitle">文章标题1</p>
-                            <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                            <p class="articleDate">2017/11/11</p>
-                            <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                        </b-col>
-                        <b-col>
-                            <p class="articleTitle">文章标题1</p>
-                            <p class="articleDes">文章描述文章描述文章描述文章描述文章描述文章描述文章描述</p>
-                            <p class="articleDate">2017/11/11</p>
-                            <b-btn variant="outline-primary">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
-                        </b-col>
+                        </template>
                     </b-row>
                 </b-container>
             </div>
@@ -83,26 +61,29 @@
             <hr id="hr1">
 
         </div>
-
+    <theBottom />
     </div>
   
 </template>
 
 <script>
+import firebase from 'firebase'
+
 export default {
   data () {
     return {
-      infoP: '  Q Z  & W D (JIANG XI)   L A W    F I R M',
-      logoURL: require('@/assets/logo.jpg'),
-      headerImg: require('@/assets/KLDImg.jpg'),
-      wxImg: require('@/assets/wx.jpeg'),
+      firebaseRef: firebase.database().ref(),
       form: {
         keyword: '',
         select: null,
         startDate: null,
         endDate: null
       },
-      selects: [{ text: '业务领域', value: null }, '业务1', '业务2', '业务3', '业务4', '业务5']
+      theArticle: {},
+      articles: {},
+      relArticles: [],
+      types: {},
+      urlID: ''
     }
   },
 
@@ -110,8 +91,69 @@ export default {
 
   },
 
-  methods: {
+  watch: {
+    '$route.params.id': function () {
+      location.reload()
+    }
+  },
 
+  methods: {
+    articleTyle: function (theType) {
+      var type = ''
+      switch (theType) {
+        case 'WZ' : type = '文章'
+          break
+        case 'FGJD' : type = '法规解读'
+          break
+        case 'SWSXW' : type = '事务所新闻'
+          break
+      }
+      return type
+    },
+
+    typeUrl (theType) {
+      return '/the-business/:' + theType
+    },
+
+    getRelUrl (theUrl) {
+      return '/news/the-article/:' + theUrl
+    }
+  },
+
+  created: function () {
+    console.log('created')
+
+    var pathName = 'Ariticles/' + this.$route.params.id.slice(1)
+    this.urlID = this.$route.params.id.slice(1)
+
+    this.firebaseRef.child(pathName).on('value', (datasnap) => {
+      this.theArticle = datasnap.val()
+      this.types = this.theArticle.type
+
+      this.firebaseRef.child('Ariticles').on('value', (datasnap) => {
+        this.articles = datasnap.val()
+
+        for (var theType in this.types) {
+          for (var theArt in this.articles) {
+            if (Object.values(this.articles[theArt].type).indexOf(this.types[theType]) > -1) {
+              this.articles[theArt].url = theArt
+              this.relArticles.push(this.articles[theArt])
+              delete this.articles[theArt]
+              if (this.relArticles.length >= 4) {
+                break
+              }
+            }
+          }
+        }
+
+        for (var i = 0; i < this.relArticles.length; i++) {
+          if (this.relArticles[i].title === this.theArticle.title) {
+            this.relArticles.splice(i, 1)
+            break
+          }
+        }
+      })
+    })
   }
 }
 </script>

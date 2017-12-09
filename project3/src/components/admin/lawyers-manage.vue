@@ -223,7 +223,7 @@ export default {
       lawWannaDelete: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}},
       options: [
         { value: '律师', text: '律师' },
-        { value: '一级合伙人', text: '一级合伙人' },
+        { value: '高级合伙人', text: '高级合伙人' },
         { value: '二级合伙人', text: '二级合伙人' }
       ]
     }

@@ -34,15 +34,12 @@
 
         <b-container style="text-align: center">
             <b-row>
-              <b-col></b-col>
               <b-col>
-                <p style="font-size: 30px; white-space: pre;">     新闻</p>
+                <p style="font-size: 30px; white-space: pre;">    新闻</p>
               </b-col>
-              <b-col></b-col><b-col></b-col>
               <b-col>
-                <p style="font-size: 30px; white-space: pre;">     业绩</p>
+                <p style="font-size: 30px; white-space: pre;">    业绩</p>
               </b-col>
-              <b-col></b-col>
             </b-row>
             <b-row>
               <b-col>
@@ -108,11 +105,10 @@
             </b-row>
             <b-row>
               <b-col>
-                <b-btn variant="warning" id="lookMore" class="buttons">查看更多</b-btn>
+                <b-btn variant="warning" id="lookMore" class="buttons md-elevation-3">查看更多</b-btn>
               </b-col>
             </b-row>
           </b-container>
-
           <div>
             
           </div>

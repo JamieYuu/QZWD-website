@@ -6,9 +6,7 @@
 
             <div id="headerImgPart">
                 <b-img id="headerImg" :src="headerImgUrl"/>
-                <div id="aboutUsTextDiv">
-                    <p id="aboutUsText">{{theBusiness.title}}</p>
-                </div>
+                <b-btn variant="primary" id="aboutUsTextDiv" class="md-elevation-7">{{theBusiness.title}}</b-btn>
             </div>
 
             <br/>
@@ -34,16 +32,11 @@
                             <div>
                                 <template v-for="n in 3">
                                 <div :key="n">
-                                <b-card>
-                                    <b-media no-body>
-                                        <b-media-body class="ml-3">
-                                        <h6 class="mt-0">律师名字</h6>
-                                        <p class="lawyerDescription">律师职位</p>
-                                        <p class="lawyerDescription">律师介绍</p>
-                                        <p class="lawyerDescription">电话 12345678</p>
-                                        </b-media-body>
-                                    </b-media>
-                                </b-card>
+                                    <b-card title="律师姓名" 
+                                            sub-title="律师职位">
+                                        <p>邮箱: aaa@gmail.com</p>
+                                        <p>电话: 1243125315125</p>
+                                    </b-card>
                                 <br/>
                                 </div>
                                 </template>
@@ -60,7 +53,7 @@
 
                     <b-row>
                         <b-col>
-                            <b-tabs>
+                            <b-tabs card>
                                 <template v-for="list in theBusiness.lists">
                                 <b-tab :key="list.id" :title="list.subtitle" active>
                                     <br>
@@ -80,15 +73,15 @@
                     </b-row>
 
                     <b-row>
-                        <template v-for="n in 4">
-                        <b-col :key="n">
+                        <template v-for="obj in relArticles">
+                        <b-col :key="obj.id">
                             <div>
-                                <b-card title="文章">
+                                <b-card :title="obj.title">
                                     <p style="font-size: 14px" class="card-text">
-                                        文章的简单描述
+                                        {{obj.des}}
                                     </p>
-                                    <p id="publishTime">2017/11/12</p>
-                                    <b-btn variant="outline-primary" class="card-link">详细内容 <i class="fa fa-angle-right" aria-hidden="true"></i></b-btn>
+                                    <p id="publishTime">{{obj.date}}</p>
+                                    <router-link :to="relArtUrl(obj.url)">详细内容 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                                 </b-card>
                             </div>
                         </b-col>
@@ -123,6 +116,7 @@ export default {
       fireStorageRef: firebase.storage().ref(),
       theBusiness: {},
       businesses: {},
+      relArticles: [],
       headerImgUrl: null
     }
   },
@@ -132,7 +126,9 @@ export default {
   },
 
   methods: {
-
+    relArtUrl: function (url) {
+      return '/news/the-article/:' + url
+    }
   },
 
   watch: {
@@ -152,6 +148,19 @@ export default {
         if (this.businesses[ele].title === pathName) {
           this.theBusiness = this.businesses[ele]
           break
+        }
+      }
+    })
+
+    this.firebaseRef.child('Ariticles').on('value', (datasnap) => {
+      var articles = datasnap.val()
+      for (var articleObj in articles) {
+        if (Object.values(articles[articleObj].type).indexOf(pathName) > -1) {
+          articles[articleObj].url = articleObj
+          this.relArticles.push(articles[articleObj])
+          if (this.relArticles.length >= 4) {
+            break
+          }
         }
       }
     })
@@ -228,7 +237,7 @@ export default {
 }
 
 #aboutUsTextDiv {
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 600;
     color: white;
     background-color: rgb(37, 146, 221);

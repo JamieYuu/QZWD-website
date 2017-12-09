@@ -5,7 +5,7 @@
 
             <div id="headerImgPart">
                 <b-img id="headerImg" :src="headerImg"/>
-                <div id="aboutUsTextDiv">
+                <div id="aboutUsTextDiv" class="md-elevation-3">
                     <p id="aboutUsText">关于我们</p>
                 </div>
             </div>

@@ -8,6 +8,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import firebase from 'firebase'
 import Header from './header'
 import BottomInf from './bottomInf'
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
+
+Vue.use(flatPickr)
 
 Vue.use(BootstrapVue)
 

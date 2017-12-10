@@ -6,7 +6,7 @@
             <br/><br/><br/><br/><br/><br/><br/><br/>
             <p id="headerTitle">{{theArticle.title}}</p>
             <div id="suoying">
-                <p><router-link to="/articles-and-news">新闻与文章 </router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> <router-link to="/news/articles"> {{articleTyle(theArticle.ZL)}}</router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> {{theArticle.title}}</p>
+                <p><router-link to="/articles-and-news">新闻与文章 </router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> <router-link :to="toArtType(theArticle.ZL)"> {{articleTyle(theArticle.ZL)}}</router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> {{theArticle.title}}</p>
             </div>
             <hr id="hr1">
 
@@ -109,6 +109,10 @@ export default {
           break
       }
       return type
+    },
+
+    toArtType: function (theType) {
+      return '/news/article-type/:' + theType
     },
 
     typeUrl (theType) {

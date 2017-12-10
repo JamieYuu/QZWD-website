@@ -25,14 +25,8 @@
                         <b-col>
                             <b-form-input id="keyWordInput"
                                 type="text" v-model="keyword"
-                                placeholder="输入关键词">
+                                placeholder="请输入关键词">
                             </b-form-input>
-                        </b-col>
-                        <b-col>
-                            <b-form-select id="businessSelect"
-                                :options="selects"
-                                v-model="select">
-                            </b-form-select>
                         </b-col>
                         <b-col cols="1"></b-col>
                     </b-row>
@@ -75,6 +69,16 @@
                             </b-col>
                         </template>
                     </b-row>
+                    <template v-if="this.resArts.length === 0">
+                        <b-row>
+                            <b-col>
+                                <div style="text-align: center">
+                                    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                    <p class="emptyArray">搜索无结果</p>
+                                </div>
+                            </b-col>
+                        </b-row>
+                    </template>
                 </b-container>
             </div>
 
@@ -96,19 +100,44 @@ export default {
       headerImg: require('@/assets/KLDImg.jpg'),
       pageTitle: '',
       keyword: '',
-      select: null,
       startDate: null,
       endDate: null,
       pathName: this.$route.params.id.slice(1),
       articles: {},
-      resArts: [],
-      selects: [{ text: '全部业务领域', value: null }]
+      articleAry: {},
+      resArts: []
     }
   },
 
   watch: {
     keyword: function () {
-      console.log(this.keyword)
+      this.searchKeyword()
+      if (this.startDate !== '') {
+        this.searchStartDate()
+      }
+      if (this.endDate !== '') {
+        this.searchEndDate()
+      }
+    },
+
+    startDate: function () {
+      this.searchKeyword()
+      if (this.startDate !== '') {
+        this.searchStartDate()
+      }
+      if (this.endDate !== '') {
+        this.searchEndDate()
+      }
+    },
+
+    endDate: function () {
+      this.searchKeyword()
+      if (this.startDate !== '') {
+        this.searchStartDate()
+      }
+      if (this.endDate !== '') {
+        this.searchEndDate()
+      }
     }
   },
 
@@ -129,35 +158,64 @@ export default {
         if (this.articles[obj].ZL === this.pathName) {
           this.articles[obj].url = obj
           this.resArts.push(this.articles[obj])
+          this.articleAry[obj] = this.articles[obj]
         }
       }
     })
-
-    this.firebaseRef.child('Business').on('value', (datasnap) => {
-      var business = datasnap.val()
-      for (var obj in business) {
-        var typeObj = {
-          text: business[obj].title,
-          value: business[obj].title
-        }
-        this.selects.push(typeObj)
-      }
-    })
-  },
-
-  components: {
-
   },
 
   methods: {
     articleUrl: function (url) {
       return '/news/the-article/:' + url
+    },
+
+    searchKeyword: function () {
+      this.resArts = []
+      if (this.keyword !== '') {
+        for (var obj in this.articleAry) {
+          if (this.articleAry[obj].title.includes(this.keyword) ||
+              this.articleAry[obj].des.includes(this.keyword) ||
+              Object.values(this.articleAry[obj].type).indexOf(this.keyword) > -1) {
+            this.resArts.push(this.articleAry[obj])
+          }
+        }
+      } else {
+        for (var theObj in this.articleAry) {
+          this.resArts.push(this.articleAry[theObj])
+        }
+      }
+    },
+
+    searchStartDate: function () {
+      var newArray = []
+      for (var i = 0; i < this.resArts.length; i++) {
+        if (this.resArts[i].date >= this.startDate) {
+          newArray.push(this.resArts[i])
+        }
+      }
+      this.resArts = newArray
+    },
+
+    searchEndDate: function () {
+      var newArray = []
+      for (var i = 0; i < this.resArts.length; i++) {
+        if (this.resArts[i].date <= this.endDate) {
+          newArray.push(this.resArts[i])
+        }
+      }
+      this.resArts = newArray
     }
   }
 }
 </script>
 
 <style scoped>
+.emptyArray {
+    font-size: 36px;
+    color: rgb(210, 210, 210);
+    font-style: italic;
+}
+
 .datePicker {
     font-size: 18px;
 }
@@ -187,6 +245,7 @@ export default {
 #articleDiv {
     margin-left: 100px;
     margin-right: 100px;
+    min-height: 550px;
 }
 
 #publishTime {

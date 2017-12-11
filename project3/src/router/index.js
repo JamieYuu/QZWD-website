@@ -11,6 +11,7 @@ import Error from '@/components/error'
 import AdminLogin from '@/components/admin-login'
 import AdminMain from '@/components/adminMain'
 import LawyerManage from '@/components/admin/lawyers-manage'
+import ArtManage from '@/components/admin/articles-manage'
 import TheBusiness from '@/components/the-business'
 
 Vue.use(Router)
@@ -93,6 +94,12 @@ export default new Router({
       path: '/admin/lawyers-manage',
       name: 'lawyersManage',
       component: LawyerManage
+    },
+
+    {
+      path: '/admin/articles-manage',
+      name: 'articlesManage',
+      component: ArtManage
     }
   ]
 })

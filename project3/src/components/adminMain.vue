@@ -10,7 +10,7 @@
                   <b-btn class="buttons" @click="toLawManage" variant="outline-primary">律师管理</b-btn>
                 </b-col>
                 <b-col>
-                  <b-btn class="buttons" variant="outline-primary">文章管理</b-btn>
+                  <b-btn class="buttons" @click="toArtManage" variant="outline-primary">文章管理</b-btn>
                 </b-col>
                 <b-col>
                   <b-btn class="buttons" variant="outline-primary">案例管理</b-btn>
@@ -54,6 +54,10 @@ export default {
   methods: {
     toLawManage: function () {
       this.$router.push('/admin/lawyers-manage')
+    },
+
+    toArtManage: function () {
+      this.$router.push('/admin/articles-manage')
     }
   }
 }

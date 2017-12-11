@@ -55,7 +55,7 @@
             <div id="articleDiv">
                 <b-container>
                     <b-row>
-                        <template v-for="obj in this.resArts">
+                        <template v-for="obj in this.pageArts">
                             <b-col :key="obj.id">
                                 <div id="single-article">
                                     <p class="articleTitle">{{obj.title}}</p>
@@ -64,7 +64,7 @@
                                     <div style="text-align: center">
                                         <router-link :to="articleUrl(obj.url)">阅读 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                                     </div>
-                                    <br/>
+                                    <br/><br/>
                                 </div>
                             </b-col>
                         </template>
@@ -81,6 +81,8 @@
                     </template>
                 </b-container>
             </div>
+
+            <b-pagination-nav align="center" base-url="#" :number-of-pages="numPages" v-model="currentPage" />
 
             <hr id="hr1">
 
@@ -105,7 +107,10 @@ export default {
       pathName: this.$route.params.id.slice(1),
       articles: {},
       articleAry: {},
-      resArts: []
+      resArts: [],
+      pageArts: [],
+      numPages: 1,
+      currentPage: 0
     }
   },
 
@@ -138,6 +143,25 @@ export default {
       if (this.endDate !== '') {
         this.searchEndDate()
       }
+    },
+
+    resArts: function () {
+      this.currentPage = 1
+      this.numPages = Math.ceil(this.resArts.length / 9)
+    },
+
+    currentPage: function () {
+      this.pageArts = []
+      if (this.resArts.length > 0) {
+        var startIndex = (this.currentPage - 1) * 9
+        var endIndex = this.currentPage * 9
+        if (endIndex > this.resArts.length) {
+          endIndex = this.resArts.length
+        }
+        for (var i = startIndex; i < endIndex; i++) {
+          this.pageArts.push(this.resArts[i])
+        }
+      }
     }
   },
 
@@ -162,6 +186,7 @@ export default {
         }
       }
     })
+    this.currentPage = 1
   },
 
   methods: {

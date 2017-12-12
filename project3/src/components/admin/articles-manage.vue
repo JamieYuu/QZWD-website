@@ -88,7 +88,7 @@ export default {
 
   methods: {
     addNew: function () {
-
+      this.$router.push('/admin/articles-manage/edit-article/:new')
     },
 
     articleType: function (type) {
@@ -100,7 +100,8 @@ export default {
     },
 
     editArt: function (url) {
-      console.log(url)
+      var editUrl = '/admin/articles-manage/edit-article/:' + url
+      this.$router.push(editUrl)
     }
   }
 }

@@ -12,6 +12,7 @@ import AdminLogin from '@/components/admin-login'
 import AdminMain from '@/components/adminMain'
 import LawyerManage from '@/components/admin/lawyers-manage'
 import ArtManage from '@/components/admin/articles-manage'
+import EditArticle from '@/components/admin/edit-article'
 import TheBusiness from '@/components/the-business'
 
 Vue.use(Router)
@@ -100,6 +101,12 @@ export default new Router({
       path: '/admin/articles-manage',
       name: 'articlesManage',
       component: ArtManage
+    },
+
+    {
+      path: '/admin/articles-manage/edit-article/:id',
+      name: 'editArticle',
+      component: EditArticle
     }
   ]
 })

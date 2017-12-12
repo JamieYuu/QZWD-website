@@ -159,12 +159,7 @@
                         <b-col>
                             <br/>
                             <label>专业领域: </label>
-                            <template v-for=" val in pros">
-                                <div :key="val.id">
-                                <input type="checkbox" :id="val.id" :value="val" v-model="lawPros">
-                                <label :for="val.id">{{val}}</label>
-                                </div>
-                            </template>
+                            <b-form-checkbox-group plain :options="pros" v-model="lawPros" />
                         </b-col>
                     </b-row>
                     <template v-if="this.lawWannaEdit.position != '律师'">
@@ -211,9 +206,7 @@ export default {
       file: null,
       fileEdit: null,
       loggedIn: false,
-      pros: [
-        '仲裁', '银行与融资', '测试领域1', '测试领域2', '测试领域3', '证券'
-      ],
+      pros: [],
       staffs: [
         {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}}
       ],
@@ -223,6 +216,7 @@ export default {
       lawWannaDelete: {oPhone: '', desc: '', email: '', name: '', phone: '', position: '', profession: {}},
       options: [
         { value: '律师', text: '律师' },
+        { value: '助理律师', text: '助理律师' },
         { value: '高级合伙人', text: '高级合伙人' },
         { value: '二级合伙人', text: '二级合伙人' }
       ]
@@ -243,6 +237,23 @@ export default {
       var some = datasnap.val()
       this.staffs = some
     })
+
+    this.firebaseRef.child('Business').once('value', (datasnap) => {
+      var theBus = datasnap.val()
+      for (var obj in theBus) {
+        var target = {text: theBus[obj].title, value: theBus[obj].title}
+        this.pros.push(target)
+      }
+    })
+  },
+
+  watch: {
+    lawPros: function () {
+      this.lawWannaAdd.profession = {}
+      for (var i = 0; i < this.lawPros.length; i++) {
+        this.lawWannaAdd.profession[i] = this.lawPros[i]
+      }
+    }
   },
 
   methods: {
@@ -269,9 +280,6 @@ export default {
     },
 
     saveNew: function () {
-      for (var val in this.lawPros) {
-        this.lawWannaAdd.profession[val] = this.lawPros[val]
-      }
       this.firebaseRef.child('Staffs').push(this.lawWannaAdd)
       var pathName = 'Staffs/' + this.lawWannaAdd.name
       this.fireStorageRef.child(pathName).put(this.file).then((snapshot) => {

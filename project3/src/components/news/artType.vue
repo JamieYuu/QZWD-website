@@ -55,7 +55,8 @@
             <div id="articleDiv">
                 <b-container>
                     <b-row>
-                        <template v-for="obj in this.pageArts">
+                        <template v-if="this.resArts.length !== 0">
+                        <template v-for="obj in pageArts">
                             <b-col :key="obj.id">
                                 <div id="single-article">
                                     <p class="articleTitle">{{obj.title}}</p>
@@ -67,6 +68,7 @@
                                     <br/><br/>
                                 </div>
                             </b-col>
+                        </template>
                         </template>
                     </b-row>
                     <template v-if="this.resArts.length === 0">
@@ -123,6 +125,7 @@ export default {
       if (this.endDate !== '') {
         this.searchEndDate()
       }
+      this.updatePageArts()
     },
 
     startDate: function () {
@@ -133,6 +136,7 @@ export default {
       if (this.endDate !== '') {
         this.searchEndDate()
       }
+      this.updatePageArts()
     },
 
     endDate: function () {
@@ -143,11 +147,7 @@ export default {
       if (this.endDate !== '') {
         this.searchEndDate()
       }
-    },
-
-    resArts: function () {
-      this.currentPage = 1
-      this.numPages = Math.ceil(this.resArts.length / 9)
+      this.updatePageArts()
     },
 
     currentPage: function () {
@@ -181,7 +181,6 @@ export default {
       for (var obj in this.articles) {
         if (this.articles[obj].ZL === this.pathName) {
           this.articles[obj].url = obj
-          this.resArts.push(this.articles[obj])
           this.articleAry[obj] = this.articles[obj]
         }
       }
@@ -209,12 +208,15 @@ export default {
           this.resArts.push(this.articleAry[theObj])
         }
       }
+      this.resArts.reverse()
     },
 
     searchStartDate: function () {
+      console.log(this.startDate)
       var newArray = []
       for (var i = 0; i < this.resArts.length; i++) {
         if (this.resArts[i].date >= this.startDate) {
+          console.log('larger')
           newArray.push(this.resArts[i])
         }
       }
@@ -229,6 +231,15 @@ export default {
         }
       }
       this.resArts = newArray
+    },
+
+    updatePageArts: function () {
+      this.currentPage = 1
+      this.pageArts = []
+      this.numPages = Math.ceil(this.resArts.length / 9)
+      for (var i = 0; i < 8; i++) {
+        this.pageArts.push(this.resArts[i])
+      }
     }
   }
 }

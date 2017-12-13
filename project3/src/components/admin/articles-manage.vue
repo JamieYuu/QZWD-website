@@ -35,11 +35,22 @@
                             <b-col><p class="tableCell">{{articleType(obj.ZL)}}</p></b-col>
                             <b-col><p class="tableCell">{{obj.author}}</p></b-col>
                             <b-col><p class="tableCell">{{obj.date}}</p></b-col>
-                            <b-col><p class="tableCell"><i class="fa fa-pencil editIcon" aria-hidden="true" @click="editArt(obj.url)"></i></p></b-col>
+                            <b-col><p class="tableCell">
+                                       <i class="fa fa-pencil editIcon" aria-hidden="true" @click="editArt(obj.url)"></i>
+                                       <i class="fa fa-trash-o editIcon" v-b-modal.modal-delete aria-hidden="true" style="color: red" @click="deleteArt = obj"></i>
+                                   </p></b-col>
                         </b-row>
                     </template>
                 </b-container>
             </div>
+
+            <b-modal ref="deleteModal" id="modal-delete" centered title="删除文章">
+                <p class="my-4">确定删除 {{deleteArt.title}} 吗?</p>
+                <div slot="modal-footer">
+                    <b-btn class="buttons" @click="deleteArticle" variant="danger">删除</b-btn>
+                    <b-btn class="buttons" variant="secondary" @click="hideDeleteModal">取消</b-btn>
+                </div>
+            </b-modal>
 
             <hr/>
         </template>
@@ -50,7 +61,6 @@
                 <router-link to="/">返回首页</router-link>
             </p>
         </template>
-
         <theBottom/>
     </div>
 </template>
@@ -63,6 +73,7 @@ export default {
     return {
       firebaseRef: firebase.database().ref(),
       articles: [],
+      deleteArt: {},
       loggedIn: false
     }
   },
@@ -83,6 +94,7 @@ export default {
         arts[obj].url = obj
         this.articles.push(arts[obj])
       }
+      this.articles.reverse()
     })
   },
 
@@ -102,6 +114,16 @@ export default {
     editArt: function (url) {
       var editUrl = '/admin/articles-manage/edit-article/:' + url
       this.$router.push(editUrl)
+    },
+
+    hideDeleteModal () {
+      this.$refs.deleteModal.hide()
+    },
+
+    deleteArticle: function () {
+      var deleteUrl = 'Ariticles/' + this.deleteArt.url
+      this.firebaseRef.child(deleteUrl).remove()
+      window.location.reload()
     }
   }
 }

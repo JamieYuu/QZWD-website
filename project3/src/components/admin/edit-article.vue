@@ -19,7 +19,7 @@
                         <b-col cols="2">文章种类:</b-col>
                         <b-col><b-form-select :options="options" v-model="targetArt.ZL"></b-form-select></b-col>
                         <b-col cols="1">发布时间:</b-col>
-                        <b-col><flat-pickr v-model="targetArt.data" placeholder="选择时间"></flat-pickr></b-col>
+                        <b-col><flat-pickr v-model="targetArt.date" placeholder="选择时间"></flat-pickr></b-col>
                     </b-row>
                     <br/>
                     <b-row>
@@ -54,8 +54,8 @@
                 </b-container>
                 <div id="saveBtn">
                     <p>
-                        <b-btn variant="success" class="buttons">保存</b-btn>
-                        <b-btn variant="secondary" class="buttons">取消</b-btn>
+                        <b-btn variant="success" @click="saveArt" class="buttons">保存</b-btn>
+                        <b-btn variant="secondary" @click="cancel" class="buttons">取消</b-btn>
                     </p>
                 </div>
             </div>
@@ -96,9 +96,9 @@ export default {
       },
       types: [],
       options: [
-        {value: '文章', text: '文章'},
-        {value: '事务所新闻', text: '事务所新闻'},
-        {value: '法规解读', text: '法规解读'}
+        {value: 'WZ', text: '文章'},
+        {value: 'SWSXW', text: '事务所新闻'},
+        {value: 'FGJD', text: '法规解读'}
       ],
       business: [],
       loggedIn: false
@@ -133,6 +133,9 @@ export default {
       var targetPath = 'Ariticles/' + pathName
       this.firebaseRef.child(targetPath).once('value', (datasnap) => {
         this.targetArt = datasnap.val()
+        for (var obj in this.targetArt.type) {
+          this.types.push(this.targetArt.type[obj])
+        }
       })
     }
 
@@ -146,6 +149,20 @@ export default {
   },
 
   methods: {
+    cancel: function () {
+      this.$router.push('/admin/articles-manage')
+    },
+
+    saveArt: function () {
+      var pathName = this.$route.params.id.slice(1)
+      if (pathName === 'new') {
+        this.firebaseRef.child('Ariticles').push(this.targetArt)
+      } else {
+        var artUrl = 'Ariticles/' + pathName
+        this.firebaseRef.child(artUrl).set(this.targetArt)
+      }
+      this.$router.push('/admin/articles-manage')
+    }
   }
 }
 </script>

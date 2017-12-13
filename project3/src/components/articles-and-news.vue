@@ -119,24 +119,24 @@ export default {
       for (var obj in this.articles) {
         var objArt = this.articles[obj]
         if (objArt.ZL === 'WZ') {
-          if (this.wzArticles.length < 4) {
-            objArt.url = obj
-            this.wzArticles.push(objArt)
-          }
+          objArt.url = obj
+          this.wzArticles.push(objArt)
         }
         if (objArt.ZL === 'SWSXW') {
-          if (this.swsxwArticles.length < 4) {
-            objArt.url = obj
-            this.swsxwArticles.push(objArt)
-          }
+          objArt.url = obj
+          this.swsxwArticles.push(objArt)
         }
         if (objArt.ZL === 'FGJD') {
-          if (this.fgjdArticles.length < 4) {
-            objArt.url = obj
-            this.fgjdArticles.push(objArt)
-          }
+          objArt.url = obj
+          this.fgjdArticles.push(objArt)
         }
       }
+      this.wzArticles.reverse()
+      this.wzArticles.splice(4)
+      this.swsxwArticles.reverse()
+      this.swsxwArticles.splice(4)
+      this.fgjdArticles.reverse()
+      this.fgjdArticles.splice(4)
     })
   },
 

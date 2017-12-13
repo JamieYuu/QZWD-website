@@ -17,7 +17,7 @@
                             <br/>
                             <div id="leftTextDiv">
                             <p class="authorInf">作者: {{theArticle.author}}律师     发布时间: {{theArticle.date}}</p>
-                            <p class="bodyText">{{theArticle.information}}</p>
+                            <p class="bodyText" v-html="theArticle.information"></p>
                             </div>
                         </b-col>
 

@@ -10,7 +10,7 @@
 
             <div id="aboutUsBody">
                 <p id="bodyTitle" class="bodyText">案例与业绩</p>
-                <hr id="hr1">
+                <hr>
                 
                 <p style="font-size: 20px">使用搜索引擎查找案例</p>
 
@@ -33,8 +33,8 @@
                 </b-container>
 
                 <br/>
-                <div id="cardsDiv">
-                    <template v-for="obj in dummyList">
+                <div class="cardsDiv">
+                    <template v-for="obj in pageList">
                         <div :key="obj.id">
                             <div class="singleCardDiv">
                                 <b-container>
@@ -59,7 +59,11 @@
                             <br/><br/>
                         </div>
                     </template>
+
+                    <b-pagination-nav align="center" base-url="#" :number-of-pages="numOfpage" v-model="currentPage" />
                 </div>
+
+                <hr/>
             </div>
         </div>
         <theBottom />
@@ -76,19 +80,26 @@ export default {
       firebaseRef: firebase.database().ref(),
       headerImg: require('@/assets/caseImg.jpg'),
       keyword: '',
-      selected: '',
+      selected: '2018',
+      numOfpage: 0,
+      currentPage: 1,
       options: [
         {text: '2018', value: '2018'},
         {text: '2017', value: '2017'},
         {text: '2016', value: '2016'},
         {text: '更早年份', value: '更早年份'}
       ],
+      pageList: [],
       dummyList: [],
       oriDummyList: [
         {date: '2017-10-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊1'},
         {date: '2017-10-3', title: '好长的一串2017年业绩的标题啊啊啊啊啊2'},
         {date: '2016-09-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊3'},
         {date: '2016-08-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊4'},
+        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
+        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
+        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
+        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
         {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
         {date: '2018-10-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊6'},
         {date: '2013-10-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊7'}
@@ -98,24 +109,40 @@ export default {
 
   created: function () {
     // window.scrollTo(0, 0)
-    this.selected = '2018'
+    this.numOfpage = Math.ceil(this.dummyList.length / 5)
+    this.searchByDate()
+    this.searchByKeyword()
+    this.getPageList()
   },
 
   watch: {
     selected: function () {
-      this.dummyList = []
-      for (var i = 0; i < this.oriDummyList.length; i++) {
-        var subDate = this.oriDummyList[i].date.substring(0, this.oriDummyList[i].date.indexOf('-'))
-        if (this.selected !== '更早年份') {
-          if (subDate === this.selected) {
-            this.dummyList.push(this.oriDummyList[i])
-          }
-        } else {
-          if (subDate < '2016') {
-            this.dummyList.push(this.oriDummyList[i])
-          }
-        }
+      this.searchByDate()
+      this.searchByKeyword()
+      if (this.currentPage === 1) {
+        this.getPageList()
+      } else {
+        this.currentPage = 1
+        this.getPageList()
       }
+    },
+
+    keyword: function () {
+      this.searchByKeyword()
+      if (this.currentPage === 1) {
+        this.getPageList()
+      } else {
+        this.currentPage = 1
+        this.getPageList()
+      }
+    },
+
+    currentPage: function () {
+      this.getPageList()
+    },
+
+    dummyList: function () {
+      this.numOfpage = Math.ceil(this.dummyList.length / 5)
     }
   },
 
@@ -133,12 +160,59 @@ export default {
     getMonth: function (theDate) {
       var delYear = theDate.substring(theDate.indexOf('-'), theDate.length)
       return delYear.substring(1, theDate.indexOf('-') - 1)
+    },
+
+    searchByDate: function () {
+      this.dummyList = []
+      for (var i = 0; i < this.oriDummyList.length; i++) {
+        var subDate = this.oriDummyList[i].date.substring(0, this.oriDummyList[i].date.indexOf('-'))
+        if (this.selected !== '更早年份') {
+          if (subDate === this.selected) {
+            this.dummyList.push(this.oriDummyList[i])
+          }
+        } else {
+          if (subDate < '2016') {
+            this.dummyList.push(this.oriDummyList[i])
+          }
+        }
+      }
+    },
+
+    searchByKeyword: function () {
+      if (this.keyword === '') {
+        this.searchByDate()
+      } else {
+        var newArray = []
+        for (var i = 0; i < this.dummyList.length; i++) {
+          if (this.dummyList[i].title.includes(this.keyword)) {
+            newArray.push(this.dummyList[i])
+          }
+        }
+        this.dummyList = newArray
+      }
+    },
+
+    getPageList: function () {
+      this.pageList = []
+      if (this.currentPage * 5 <= this.dummyList.length) {
+        for (var i = (this.currentPage - 1) * 5; i < this.currentPage * 5; i++) {
+          this.pageList.push(this.dummyList[i])
+        }
+      } else {
+        for (var o = (this.currentPage - 1) * 5; o < this.dummyList.length; o++) {
+          this.pageList.push(this.dummyList[o])
+        }
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.cardsDiv {
+    min-height: 700px;
+}
+
 .cardTitleText {
     font-size: 24px;
     margin-top: 30px;
@@ -192,7 +266,7 @@ export default {
     margin-right: 100px;
 }
 
-#hr1 {
+hr {
     border-width: 3px;
     margin-top: 0px;
 }

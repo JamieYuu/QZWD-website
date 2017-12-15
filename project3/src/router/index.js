@@ -14,6 +14,7 @@ import LawyerManage from '@/components/admin/lawyers-manage'
 import ArtManage from '@/components/admin/articles-manage'
 import EditArticle from '@/components/admin/edit-article'
 import TheBusiness from '@/components/the-business'
+import Cases from '@/components/cases'
 
 Vue.use(Router)
 
@@ -107,6 +108,12 @@ export default new Router({
       path: '/admin/articles-manage/edit-article/:id',
       name: 'editArticle',
       component: EditArticle
+    },
+
+    {
+      path: '/cases',
+      name: 'cases',
+      component: Cases
     }
   ]
 })

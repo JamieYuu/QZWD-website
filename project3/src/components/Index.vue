@@ -92,9 +92,8 @@
           <br/><br/>
 
           <div class="workPlace">
-            <br/><br/>
-            <p style="font-size: 26px">办公地点</p>
             <br/>
+            <p style="font-size: 28px">办公地点</p>
             <div class="workPlaceDiv">
               <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
@@ -193,7 +192,7 @@ export default {
 .workPlace {
   text-align: center;
   width: 100%;
-  height: 850px;
+  height: 800px;
   background-color: rgb(230, 230, 230);
 }
 

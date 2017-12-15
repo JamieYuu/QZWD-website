@@ -7,8 +7,10 @@
                         <b-btn variant="link" id="buttons"><router-link id="buttons" to="/about-us">关于我们</router-link></b-btn>
                         <b-btn variant="link" id="buttons" v-b-toggle.ywlyCL class="m-1">业务领域 <i class="fa fa-caret-down" aria-hidden="true"></i></b-btn>
                         <b-btn variant="link" id="buttons"><router-link id="buttons" to="/staffs">律师团队</router-link></b-btn>
-                        <b-btn variant="link" id="buttons">成功案例</b-btn>
+                        <b-btn variant="link" id="buttons"><router-link id="buttons" to="/cases">案例与业绩</router-link></b-btn>
                         <b-btn variant="link" id="buttons" v-b-toggle.newsCL><router-link id="buttons" to="/articles-and-news">新闻与文章</router-link></b-btn>
+                        <b-btn variant="link" id="buttons">律所文化</b-btn>
+
                     <b-collapse id="ywlyCL">
                         <b-card id="ywlyDD">
                             <b-container id="ywlyDDtable">

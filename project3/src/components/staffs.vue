@@ -128,7 +128,7 @@
                 <h6 style="font-size: 20px;" class="my-4">专业领域</h6>
                 <ul>
                     <template v-for="pros in target.profession">
-                    <li :key="pros.id">{{pros}}</li>
+                    <li :key="pros.id"><router-link :to="getBusUrl(pros)">{{pros}}</router-link></li>
                     </template>
                 </ul>
             </b-modal>
@@ -148,7 +148,6 @@ export default {
       firebaseRef: firebase.database().ref(),
       fireStorageRef: firebase.storage().ref(),
       headerImg: require('@/assets/STFImg.jpg'),
-      wxImg: require('@/assets/wx.jpeg'),
       filter: null,
       thePicSrc: null,
       staffs: {},
@@ -178,15 +177,21 @@ export default {
       })
       console.log(this.target)
     },
+
     onFiltered (filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = Math.ceil(filteredItems.length / this.perPage)
       this.currentPage = 1
+    },
+
+    getBusUrl: function (url) {
+      return '/the-business/:' + url
     }
   },
 
   created: function () {
     console.log('created')
+    window.scrollTo(0, 0)
 
     this.firebaseRef.child('Staffs').on('value', (datasnap) => {
       this.staffs = datasnap.val()
@@ -265,7 +270,7 @@ export default {
 }
 
 #aboutUsTextDiv {
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 600;
     color: white;
     background-color: rgb(37, 146, 221);

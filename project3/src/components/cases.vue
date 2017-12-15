@@ -34,6 +34,7 @@
 
                 <br/>
                 <div class="cardsDiv">
+                    <template v-if="pageList.length > 0">
                     <template v-for="obj in pageList">
                         <div :key="obj.id">
                             <div class="singleCardDiv">
@@ -60,6 +61,16 @@
                         </div>
                     </template>
 
+                    </template>
+                    <template v-else>
+                        <div style="text-align: center">
+                            <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                            <p class="emptyArray">搜索无结果</p>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="pageinationNav">
                     <b-pagination-nav align="center" base-url="#" :number-of-pages="numOfpage" v-model="currentPage" />
                 </div>
 
@@ -209,6 +220,12 @@ export default {
 </script>
 
 <style scoped>
+.emptyArray {
+    font-size: 36px;
+    color: rgb(210, 210, 210);
+    font-style: italic;
+}
+
 .cardsDiv {
     min-height: 700px;
 }

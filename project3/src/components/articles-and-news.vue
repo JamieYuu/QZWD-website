@@ -113,6 +113,8 @@ export default {
   },
 
   created: function () {
+    window.scrollTo(0, 0)
+
     this.firebaseRef.child('Ariticles').on('value', (datasnap) => {
       var some = datasnap.val()
       this.articles = some

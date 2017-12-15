@@ -39,6 +39,13 @@
                     </b-row>
                     <br/>
                     <b-row>
+                        <b-col>文章介绍:</b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col><b-form-textarea v-model="targetArt.des" :rows="3"></b-form-textarea></b-col>
+                    </b-row>
+                    <br/>
+                    <b-row>
                         <b-col>文章分类:</b-col>
                     </b-row>
                     <b-row>

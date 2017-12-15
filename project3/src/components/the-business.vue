@@ -11,7 +11,7 @@
 
             <br/>
             <div id="suoying">
-                <p><router-link to="/allBusiness">业务领域 </router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> {{theBusiness.title}}</p>
+                <p><router-link to="/all-business">业务领域 </router-link> <i class="fa fa-angle-right" aria-hidden="true"></i> {{theBusiness.title}}</p>
             </div>
             <hr id="hr1">
 
@@ -76,7 +76,8 @@
                         <template v-for="obj in relArticles">
                         <b-col :key="obj.id">
                             <div>
-                                <b-card :title="obj.title">
+                                <b-card>
+                                    <p style="font-weight: 500; font-size: 16px">{{obj.title}}</p>
                                     <p style="font-size: 14px" class="card-text">
                                         {{obj.des}}
                                     </p>
@@ -158,11 +159,10 @@ export default {
         if (Object.values(articles[articleObj].type).indexOf(pathName) > -1) {
           articles[articleObj].url = articleObj
           this.relArticles.push(articles[articleObj])
-          if (this.relArticles.length >= 4) {
-            break
-          }
         }
       }
+      this.relArticles.reverse()
+      this.relArticles.splice(4)
     })
 
     var imgPathName = 'Business/' + pathName + '.jpg'

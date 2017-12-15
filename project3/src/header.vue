@@ -88,17 +88,10 @@ export default {
 #ywlyDD {
     z-index: 3;
     background-color: black;
+    opacity: 0.8;
     width: 400px;
     height: 180px;
     left: 40px;
-}
-
-#newsDD {
-    z-index: 3;
-    background-color: black;
-    width: 320px;
-    height: 60px;
-    left: 370px;
 }
 
 #logoimg {

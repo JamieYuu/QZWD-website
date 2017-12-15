@@ -126,6 +126,7 @@ export default {
 
   created: function () {
     console.log('created')
+    window.scrollTo(0, 0)
 
     var pathName = 'Ariticles/' + this.$route.params.id.slice(1)
     this.urlID = this.$route.params.id.slice(1)

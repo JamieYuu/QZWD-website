@@ -37,7 +37,7 @@
                     <template v-if="pageList.length > 0">
                     <template v-for="obj in pageList">
                         <div :key="obj.id">
-                            <div class="singleCardDiv">
+                            <div class="singleCardDiv" @click="toCaseUrl(obj.url)">
                                 <b-container>
                                     <b-row>
                                         <b-col cols="1">
@@ -102,28 +102,24 @@ export default {
       ],
       pageList: [],
       dummyList: [],
-      oriDummyList: [
-        {date: '2017-10-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊1'},
-        {date: '2017-10-3', title: '好长的一串2017年业绩的标题啊啊啊啊啊2'},
-        {date: '2016-09-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊3'},
-        {date: '2016-08-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊4'},
-        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
-        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
-        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
-        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
-        {date: '2018-12-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊5'},
-        {date: '2018-10-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊6'},
-        {date: '2013-10-2', title: '好长的一串2017年业绩的标题啊啊啊啊啊7'}
-      ]
+      oriDummyList: []
     }
   },
 
   created: function () {
-    // window.scrollTo(0, 0)
-    this.numOfpage = Math.ceil(this.dummyList.length / 5)
-    this.searchByDate()
-    this.searchByKeyword()
-    this.getPageList()
+    window.scrollTo(0, 0)
+    this.firebaseRef.child('Cases').once('value', (datasnap) => {
+      var casesObj = datasnap.val()
+      for (var obj in casesObj) {
+        casesObj[obj].url = obj
+        this.oriDummyList.push(casesObj[obj])
+      }
+      this.oriDummyList.reverse()
+      this.numOfpage = Math.ceil(this.dummyList.length / 5)
+      this.searchByDate()
+      this.searchByKeyword()
+      this.getPageList()
+    })
   },
 
   watch: {
@@ -164,6 +160,11 @@ export default {
   },
 
   methods: {
+    toCaseUrl: function (url) {
+      var thePath = '/cases/the-case/:' + url
+      this.$router.push(thePath)
+    },
+
     getYear: function (theDate) {
       return theDate.substring(0, theDate.indexOf('-'))
     },

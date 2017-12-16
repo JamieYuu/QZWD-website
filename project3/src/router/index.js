@@ -15,6 +15,7 @@ import ArtManage from '@/components/admin/articles-manage'
 import EditArticle from '@/components/admin/edit-article'
 import TheBusiness from '@/components/the-business'
 import Cases from '@/components/cases'
+import TheCase from '@/components/cases/the-case'
 
 Vue.use(Router)
 
@@ -114,6 +115,12 @@ export default new Router({
       path: '/cases',
       name: 'cases',
       component: Cases
+    },
+
+    {
+      path: '/cases/the-case/:id',
+      name: 'theCases',
+      component: TheCase
     }
   ]
 })

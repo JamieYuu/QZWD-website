@@ -13,10 +13,7 @@
                   <b-btn class="buttons" @click="toArtManage" variant="outline-primary">文章管理</b-btn>
                 </b-col>
                 <b-col>
-                  <b-btn class="buttons" @click="toArtManage" variant="outline-primary">文章管理</b-btn>
-                </b-col>
-                <b-col>
-                  <b-btn class="buttons" variant="outline-primary">案例管理</b-btn>
+                  <b-btn class="buttons" @click="toCaseManage" variant="outline-primary">案例管理</b-btn>
                 </b-col>
               </b-row>
             </b-container>
@@ -61,6 +58,10 @@ export default {
 
     toArtManage: function () {
       this.$router.push('/admin/articles-manage')
+    },
+
+    toCaseManage: function () {
+      this.$router.push('/admin/cases-manage')
     }
   }
 }

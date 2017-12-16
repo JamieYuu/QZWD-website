@@ -11,8 +11,10 @@ import Error from '@/components/error'
 import AdminLogin from '@/components/admin-login'
 import AdminMain from '@/components/adminMain'
 import LawyerManage from '@/components/admin/lawyers-manage'
+import CasesManage from '@/components/admin/cases-manage'
 import ArtManage from '@/components/admin/articles-manage'
 import EditArticle from '@/components/admin/edit-article'
+import EditCase from '@/components/admin/edit-case'
 import TheBusiness from '@/components/the-business'
 import Cases from '@/components/cases'
 import TheCase from '@/components/cases/the-case'
@@ -106,9 +108,21 @@ export default new Router({
     },
 
     {
+      path: '/admin/cases-manage',
+      name: 'casesManage',
+      component: CasesManage
+    },
+
+    {
       path: '/admin/articles-manage/edit-article/:id',
       name: 'editArticle',
       component: EditArticle
+    },
+
+    {
+      path: '/admin/cases-manage/edit-case/:id',
+      name: 'editCase',
+      component: EditCase
     },
 
     {

@@ -66,17 +66,20 @@
               <b-col>
                 <ul style="list-style: none;">
                   <li>
-                    <b-card title="文章标题"
+                    <template v-for="obj in cases">
+                    <div :key="obj.id">
+                    <b-card :title="obj.title"
                         title-tag = "h6"
-                        sub-title="10/10/2017">
+                        :sub-title="obj.date">
                       <div class="desDiv">
-                      <p class="card-text">
-                        Some quick example text to build on the <em>card title</em> and make up the bulk of the card's content.
-                      </p>
+                      <p class="card-text">承办律师: {{obj.lawyer}}</p>
+                      <p class="card-text">联系方式: {{obj.lawyerPhone}} | {{obj.lawyerEmail}}</p>
                       </div>
-                      <router-link to="/">阅读详情 <i class="fa fa-chevron-right" aria-hidden="true"></i></router-link>
+                      <router-link :to="getCaseUrl(obj.url)">阅读详情 <i class="fa fa-chevron-right" aria-hidden="true"></i></router-link>
                     </b-card>
                     <br/>
+                    </div>
+                    </template>
                   </li>
                 </ul>
               </b-col>
@@ -145,7 +148,8 @@ export default {
       pos1Img: require('@/assets/pos1.png'),
       currentPage: 3,
       slide: 0,
-      articles: []
+      articles: [],
+      cases: []
     }
   },
 
@@ -160,6 +164,16 @@ export default {
       this.articles.reverse()
       this.articles.splice(3)
     })
+
+    this.firebaseRef.child('Cases').once('value', (datasnap) => {
+      var artObj = datasnap.val()
+      for (var obj in artObj) {
+        artObj[obj].url = obj
+        this.cases.push(artObj[obj])
+      }
+      this.cases.reverse()
+      this.cases.splice(3)
+    })
   },
 
   components: {
@@ -169,6 +183,10 @@ export default {
   methods: {
     getArtUrl: function (url) {
       return '/news/the-article/:' + url
+    },
+
+    getCaseUrl: function (url) {
+      return '/cases/the-case/:' + url
     },
 
     lookMore: function () {
@@ -197,7 +215,10 @@ export default {
 }
 
 .desDiv {
-  min-height: 80px;
+  width: 100%;
+  height: 75px;
+  overflow: hidden;
+  text-overflow: clip;
 }
 
 #lookMore {

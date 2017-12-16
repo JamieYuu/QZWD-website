@@ -53,6 +53,7 @@ export default {
 
   created: function () {
     console.log('created')
+    window.scrollTo(0, 0)
 
     var pathName = '/Cases/' + this.$route.params.id.slice(1)
     this.firebaseRef.child(pathName).once('value', (datasnap) => {

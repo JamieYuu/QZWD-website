@@ -149,7 +149,8 @@ export default {
       currentPage: 3,
       slide: 0,
       articles: [],
-      cases: []
+      cases: [],
+      show: true
     }
   },
 

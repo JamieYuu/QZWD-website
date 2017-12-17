@@ -16,71 +16,55 @@
             <hr id="hr1">
 
             <div id="mainBodyText">
+                <div id="bodyLeftPart">
+                    <div style="text-align: center;">
+                        <p class="mainBodyTextTitle">{{theBusiness.bigTitle}}</p>
+                    </div>
+                    <p class="mainBodyTextInf">{{theBusiness.mainBody}}</p>
+                </div>
+
+                <div>
+                    <hr id="hr3">
+                    <div class="teamDiv">
+                        <p class="mainBodyTextTitle">我们的团队</p>
+                        <div class="teamDesText">
+                            <p>{{theBusiness.teamDes}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr id="hr3">
+
+                <p class="interestTitle">更多细节</p>
+                <b-tabs card>
+                    <template v-for="list in theBusiness.lists">
+                        <b-tab :key="list.id" :title="list.subtitle" active>
+                            <br>
+                            <div class="tabsDesDiv">
+                                <p>{{list.description}}</p>
+                            </div>
+                        </b-tab>
+                    </template>
+                </b-tabs>
+
+                <br/>
+                <hr id="hr3">
+                <p class="interestTitle">您可能想要了解</p>
+                <br/>
+
                 <b-container>
-                    <b-row>
-                        <b-col>
-                            <div id="bodyLeftPart">
-                            <p class="mainBodyTextTitle">{{theBusiness.bigTitle}}</p>
-                            <template v-for="n in 9">
-                                <p class="mainBodyTextInf" :key="n">{{theBusiness.mainBody}}</p>
-                            </template>
-                            </div>
-                        </b-col>
-
-                        <b-col cols="5">
-                            <p class="mainBodyTextTitle">我们的团队</p>
-                            <div>
-                                <template v-for="n in 3">
-                                <div :key="n">
-                                    <b-card title="律师姓名" 
-                                            sub-title="律师职位">
-                                        <p>邮箱: aaa@gmail.com</p>
-                                        <p>电话: 1243125315125</p>
-                                    </b-card>
-                                <br/>
-                                </div>
-                                </template>
-                            </div>
-
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col>
-                            <hr id="hr3">
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col>
-                            <b-tabs card>
-                                <template v-for="list in theBusiness.lists">
-                                <b-tab :key="list.id" :title="list.subtitle" active>
-                                    <br>
-                                    <p>{{list.description}}</p>
-                                </b-tab>
-                                </template>
-                            </b-tabs>
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col>
-                            <br/>
-                            <hr id="hr3">
-                            <br/>
-                        </b-col>
-                    </b-row>
-
                     <b-row>
                         <template v-for="obj in relArticles">
                         <b-col :key="obj.id">
                             <div>
                                 <b-card>
                                     <p style="font-weight: 500; font-size: 16px">{{obj.title}}</p>
+                                    <div class="relArtDesDiv">
                                     <p style="font-size: 14px" class="card-text">
                                         {{obj.des}}
                                     </p>
+                                    </div>
+                                    <br/>
                                     <p id="publishTime">{{obj.date}}</p>
                                     <router-link :to="relArtUrl(obj.url)">详细内容 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                                 </b-card>
@@ -88,21 +72,15 @@
                         </b-col>
                         </template>
                     </b-row>
-
-                    <b-row>
-                        <b-col>
-                            <br/>
-                            <br/>
-                            <hr id="hr3">
-                        </b-col>
-                    </b-row>
                 </b-container>
+
+                <br/>
+                <br/>
+                <hr id="hr3">
             </div>
-
         </div>
-
+        
         <theBottom/>
-
     </div>
   
 </template>
@@ -174,6 +152,29 @@ export default {
 </script>
 
 <style scoped>
+.tabsDesDiv {
+    min-height: 100px;
+}
+
+.teamDiv {
+    min-height: 200px;
+}
+
+.teamDesText {
+    width: 100px;
+    margin-right: 100px;
+}
+
+.interestTitle {
+    font-size: 24px;
+}
+
+.relArtDesDiv {
+    height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #publishTime {
     font-size: 10px;
     font-style: italic;
@@ -184,7 +185,7 @@ export default {
 }
 
 #bodyLeftPart {
-    border-right: thin solid gray;
+    min-height: 600px;
 }
 
 .mainBodyTextInf {

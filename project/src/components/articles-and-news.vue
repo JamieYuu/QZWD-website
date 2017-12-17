@@ -23,8 +23,11 @@
                             <template v-for="obj in wzArticles">
                             <b-col :key="obj.id">
                                 <p class="articleTitle">{{obj.title}}</p>
-                                <p class="articleDate">{{obj.date}}</p>
+                                <div class="desDiv">
                                 <p class="articleDes">{{obj.des}}</p>
+                                </div>
+                                <br/>
+                                <p class="articleDate">{{obj.date}}</p>
                                 <router-link :to="theUrl(obj.url)">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                             </b-col>
                             </template>
@@ -47,7 +50,10 @@
                             <template v-for="obj in swsxwArticles">
                             <b-col :key="obj.id">
                                 <p class="articleTitle">{{obj.title}}</p>
+                                <div class="desDiv">
                                 <p class="articleDes">{{obj.des}}</p>
+                                </div>
+                                <br/>
                                 <p class="articleDate">{{obj.date}}</p>
                                 <router-link :to="theUrl(obj.url)">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                             </b-col>
@@ -71,7 +77,10 @@
                             <template v-for="obj in fgjdArticles">
                             <b-col :key="obj.id">
                                 <p class="articleTitle">{{obj.title}}</p>
+                                <div class="desDiv">
                                 <p class="articleDes">{{obj.des}}</p>
+                                </div>
+                                <br/>
                                 <p class="articleDate">{{obj.date}}</p>
                                 <router-link :to="theUrl(obj.url)">阅读文章 <i class="fa fa-angle-right" aria-hidden="true"></i></router-link>
                             </b-col>
@@ -164,6 +173,12 @@ export default {
 </script>
 
 <style scoped>
+.desDiv {
+    height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .links:hover {
     color: white;
 }

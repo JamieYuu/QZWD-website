@@ -11,31 +11,27 @@
             <hr id="hr1">
 
             <div id="mianText">
-                <b-container>
-                    <b-row>
-                        <b-col>
-                            <br/>
-                            <div id="leftTextDiv">
-                            <p class="authorInf">作者: {{theArticle.author}}律师     发布时间: {{theArticle.date}}</p>
-                            <p class="bodyText" v-html="theArticle.information"></p>
-                            </div>
-                        </b-col>
-
-                        <b-col cols="5">
-                            <p style="font-size: 20px;"> 作者介绍: {{theArticle.author}} 律师</p>
-                            <p>联系方式: {{theArticle.authorPhone}} | {{theArticle.authorEmail}}</p>
-                            <p>{{theArticle.authorDes}}</p>
-                        </b-col>
-                    </b-row>
-                </b-container>
                 <br/>
-                <p>类别: 
-                    <template v-for="ele in theArticle.type">
-                        | 
-                        <router-link :key="ele.id" :to="typeUrl(ele)">{{ele}}</router-link>
-                         |
-                    </template>
-                </p>
+                <div id="leftTextDiv">
+                    <p class="authorInf">作者: {{theArticle.author}}律师     发布时间: {{theArticle.date}}</p>
+                    <p class="bodyText" v-html="theArticle.information"></p>
+                    <br/>
+                    <p>类别: 
+                        <template v-for="ele in theArticle.type">
+                            | 
+                            <router-link :key="ele.id" :to="typeUrl(ele)">{{ele}}</router-link>
+                             |
+                        </template>
+                    </p>
+                </div>
+
+                <hr id="hr3"/>
+                <br/>
+
+                <p style="font-size: 20px;"> 作者介绍: {{theArticle.author}} 律师</p>
+                <p>联系方式: {{theArticle.authorPhone}} | {{theArticle.authorEmail}}</p>
+                <p>{{theArticle.authorDes}}</p>
+                <br/>
             </div>
 
             <hr id="hr1">
@@ -165,7 +161,6 @@ export default {
 
 <style scoped>
 #leftTextDiv {
-    border-right: thin solid gray;
 }
 
 .authorInf {

@@ -17,7 +17,7 @@
                             <br/>
                             <p id="decText">版权所有:江西求正沃德律师事务所</p>
                             <p id="decText">Email: qz.jz.lawfirm@163.com</p>
-                            <p id="decText">技术支持:Jiazheng Yu <i class="fa fa-envelope" aria-hidden="true"></i> jzjaimeyu@gmail.com</p>
+                            <p id="decText">技术支持:Jiazheng Yu <i class="fa fa-envelope" aria-hidden="true"></i> jiazhengyu.work@gmail.com</p>
                             <p id="decText">@江西求正沃德律师事务所 2017. 赣ICP备 06003918号</p>
                         </div>
                     </b-col>

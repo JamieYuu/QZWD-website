@@ -3,11 +3,16 @@
         <theHeader/>
 
         <div id="indexbody">
-
+            
+            <template v-if="noPic">
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+            </template>
+            <template v-else>
             <div id="headerImgPart">
                 <b-img id="headerImg" :src="headerImgUrl"/>
                 <b-btn variant="primary" id="aboutUsTextDiv" class="md-elevation-7">{{theBusiness.title}}</b-btn>
             </div>
+            </template>
 
             <br/>
             <div id="suoying">
@@ -28,7 +33,7 @@
                     <div class="teamDiv">
                         <p class="mainBodyTextTitle">我们的团队</p>
                         <div class="teamDesText">
-                            <p>{{theBusiness.teamDes}}</p>
+                            <p v-html="theBusiness.teamDes"></p>
                         </div>
                     </div>
                 </div>
@@ -96,7 +101,8 @@ export default {
       theBusiness: {},
       businesses: {},
       relArticles: [],
-      headerImgUrl: null
+      headerImgUrl: null,
+      noPic: false
     }
   },
 
@@ -120,7 +126,7 @@ export default {
     console.log('created')
     var pathName = this.$route.params.id.slice(1)
 
-    this.firebaseRef.child('Business').on('value', (datasnap) => {
+    this.firebaseRef.child('Business').once('value', (datasnap) => {
       this.businesses = datasnap.val()
 
       for (var ele in this.businesses) {
@@ -131,7 +137,7 @@ export default {
       }
     })
 
-    this.firebaseRef.child('Ariticles').on('value', (datasnap) => {
+    this.firebaseRef.child('Ariticles').once('value', (datasnap) => {
       var articles = datasnap.val()
       for (var articleObj in articles) {
         if (Object.values(articles[articleObj].type).indexOf(pathName) > -1) {
@@ -146,6 +152,9 @@ export default {
     var imgPathName = 'Business/' + pathName + '.jpg'
     this.fireStorageRef.child(imgPathName).getDownloadURL().then((url) => {
       this.headerImgUrl = url
+    }).catch((error) => {
+      console.log(error)
+      this.noPic = true
     })
   }
 }
@@ -161,7 +170,6 @@ export default {
 }
 
 .teamDesText {
-    width: 100px;
     margin-right: 100px;
 }
 

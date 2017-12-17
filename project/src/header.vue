@@ -57,7 +57,7 @@ export default {
   },
 
   created: function () {
-    this.firebaseRef.child('Business').on('value', (datasnap) => {
+    this.firebaseRef.child('Business').once('value', (datasnap) => {
       this.business = datasnap.val()
       for (var ele in this.business) {
         this.lists.push(

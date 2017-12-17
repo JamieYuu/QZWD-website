@@ -330,6 +330,7 @@ export default {
       if (this.lawWannaEdit.position !== '律师' && this.file !== null) {
         var pathName = 'Staffs/' + this.lawWannaEdit.name
         console.log(pathName)
+        this.firestorageRef.child(pathName).delete().then(() => {})
         this.fireStorageRef.child(pathName).put(this.file).then((snapshot) => {
           console.log('Uploaded a blob or file!')
         })
